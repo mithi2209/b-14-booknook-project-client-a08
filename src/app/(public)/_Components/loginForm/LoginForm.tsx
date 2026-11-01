@@ -29,7 +29,7 @@ const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const [showPassword, setShowPassword] = useState(false);
 
-const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 e.preventDefault();
 
 // Connect your Better Auth login function here.

@@ -68,6 +68,7 @@ const itemVariants = {
 const FeaturedAuthors = () => {
     return (
       <section className="bg-warm-ivory px-4 py-14 transition-colors duration-300 dark:bg-[#30392F] sm:py-20">
+
       <div className="container mx-auto">
         {/* Section heading */}
         <motion.div
@@ -77,8 +78,8 @@ const FeaturedAuthors = () => {
           transition={{ duration: 0.5 }}
           className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"
         >
-          <div>
-            <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-deep-olive dark:text-sunny-yellow">
+          <div className=" ">
+            <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-deep-olive dark:text-sunny-yellow ">
               MEET THE STORYTELLERS
             </p>
 

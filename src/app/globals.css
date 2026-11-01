@@ -289,3 +289,36 @@
     height: 32px;
   }
 }
+
+
+
+/* =================================
+   FOOTER BACKGROUND IMAGES
+================================= */
+
+.footer-bg {
+  background-image: var(--footer-light);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+}
+
+.dark .footer-bg {
+  background-image: var(--footer-dark);
+}
+
+/* Tablet */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .footer-bg {
+    background-size: 100% 100%;
+    background-position: center top;
+  }
+}
+
+/* Mobile */
+@media (max-width: 639px) {
+  .footer-bg {
+    background-size: 100% 100%;
+    background-position: center bottom;
+  }
+}

@@ -9,10 +9,10 @@ import { BookOpen, Menu, X, Sun, Moon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const navLinks = [
+export const navLinks = [
   { name: "Home", href: "/" },
   { name: "All Books", href: "/books" },
-  { name: "Add Book", href: "/add-book" },
+  { name: "Add Book", href: "/add-books" },
   { name: "My Books", href: "/my-books" },
   { name: "My Borrows", href: "/my-borrows" },
 ];

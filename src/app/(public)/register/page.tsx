@@ -1,7 +1,7 @@
 
 
 import type { Metadata } from "next";
-import RegisterForm from "@/components/registerForm/RegisterForm";
+import RegisterForm from "../_Components/registerForm/RegisterForm";
 
 
 export const metadata: Metadata = {

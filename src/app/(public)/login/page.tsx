@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Log in to your BookNook account.",
 };
 
-import LoginForm from "@/components/loginForm/LoginForm";
+import LoginForm from "../_Components/loginForm/LoginForm";
 
 const LoginPage = () => {
     return (

@@ -1,5 +1,9 @@
 
+
 import type { Metadata } from "next";
+import AddBooksForm from "../_Components/addBooksForm/AddBooksForm";
+
+
 
 export const metadata: Metadata = {
   title: "BookNook | Add Books",
@@ -7,9 +11,10 @@ export const metadata: Metadata = {
 };
 
 const AddBooks = () => {
+  
     return (
         <div>
-            
+            <AddBooksForm/>
         </div>
     );
 };

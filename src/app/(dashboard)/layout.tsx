@@ -4,7 +4,8 @@
 
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import DashboardShell from "@/components/dashboard-compo/DashboardShell";
+import DashBoardShell from "./_Components/dashboardDesign/DashBoardShell";
+
 
 
 
@@ -18,9 +19,9 @@ export default async function DashboardLayout({ children }: LayoutProps<"/">) {
 //   }
 
   return (
-    <DashboardShell>
+    <DashBoardShell>
       {children}
-    </DashboardShell>
+    </DashBoardShell>
   );
 }
 

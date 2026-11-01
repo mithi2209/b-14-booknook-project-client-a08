@@ -1,9 +1,10 @@
 
 
-import BannerSlider from "@/components/homepage/BannerSlider";
-import Categories from "@/components/homepage/Categories";
-import NewArrivals from "@/components/homepage/NewArrivals";
 import type { Metadata } from "next";
+import NewArrivals from "@/components/homepage/NewArrivals";
+import BannerSlider from "@/components/homepage/BannerSlider";
+import TopCategories from "@/components/homepage/TopCategories";
+import HowBorrowingBooks from "@/components/homepage/HowBorrowingBooks";
 
 
 
@@ -17,9 +18,11 @@ export default function HomePage() {
     <>
       <BannerSlider />
 
+      <HowBorrowingBooks/>
+
       <NewArrivals />
 
-      <Categories />
+      <TopCategories />
     </>
   );
 }

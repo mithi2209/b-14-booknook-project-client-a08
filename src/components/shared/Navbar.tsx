@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -78,7 +76,6 @@ const Navbar = () => {
 
           {/* Login */}
           <Button
-            
             variant="outline"
             className="border-coffee-brown bg-transparent text-coffee-brown hover:bg-terracotta hover:text-coffee-brown dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
           >
@@ -86,10 +83,7 @@ const Navbar = () => {
           </Button>
 
           {/* Register */}
-          <Button
-            
-            className="bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
-          >
+          <Button className="bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
             <Link href="/register">Register</Link>
           </Button>
         </div>
@@ -138,7 +132,6 @@ const Navbar = () => {
 
           <div className="mt-5 flex gap-3 border-t border-border pt-5">
             <Button
-              
               variant="outline"
               className="flex-1 border-coffee-brown text-coffee-brown hover:bg-terracotta dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
             >
@@ -147,10 +140,7 @@ const Navbar = () => {
               </Link>
             </Button>
 
-            <Button
-              
-              className="flex-1 bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
-            >
+            <Button className="flex-1 bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
               <Link href="/register" onClick={closeMenu}>
                 Register
               </Link>

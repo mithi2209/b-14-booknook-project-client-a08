@@ -299,7 +299,7 @@
 .footer-bg {
   background-image: var(--footer-light);
   background-repeat: no-repeat;
-  background-position: center top;
+  background-position: bottom right;
   background-size: cover;
 }
 
@@ -310,15 +310,37 @@
 /* Tablet */
 @media (min-width: 640px) and (max-width: 1023px) {
   .footer-bg {
+
     background-size: 100% 100%;
-    background-position: center top;
+    background-position:center top;
   }
+
 }
 
 /* Mobile */
-@media (max-width: 639px) {
+/* @media (max-width: 639px) {
   .footer-bg {
     background-size: 100% 100%;
-    background-position: center bottom;
+    background-position: right top;
+  }
+
+} */
+
+
+
+
+/* Mobile - Light Mode */
+@media (max-width: 767px) {
+  .footer-bg {
+    background-image: none;
+    background-color: var(--warm-ivory);
+   
+  }
+
+  /* Mobile - Dark Mode */
+  .dark .footer-bg {
+    background-image: none;
+    background-color: var(--background);
+
   }
 }

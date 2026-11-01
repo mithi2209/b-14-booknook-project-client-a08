@@ -1,7 +1,10 @@
+
+
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import { BookOpen, Menu, X, Sun, Moon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,15 +18,12 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const [isDark, setIsDark] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   // Toggle theme
   const toggleTheme = () => {
-    const newTheme = !isDark;
-
-    setIsDark(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme);
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   // Close mobile menu
@@ -33,8 +33,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 text-foreground shadow-sm backdrop-blur">
-
-      <div className="mx-auto grid container grid-cols-[1fr_auto] items-center px-4 py-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-8">
+      <div className="container mx-auto grid grid-cols-[1fr_auto] items-center px-4 py-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-8">
         {/* Logo */}
         <Link
           href="/"
@@ -73,15 +72,13 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="rounded-full text-coffee-brown hover:bg-muted-sage dark:text-warm-ivory dark:hover:bg-deep-olive"
           >
-            {isDark ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
+            <Sun className="hidden h-5 w-5 dark:block" />
+            <Moon className="h-5 w-5 dark:hidden" />
           </Button>
 
           {/* Login */}
           <Button
+            
             variant="outline"
             className="border-coffee-brown bg-transparent text-coffee-brown hover:bg-terracotta hover:text-coffee-brown dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
           >
@@ -89,7 +86,10 @@ const Navbar = () => {
           </Button>
 
           {/* Register */}
-          <Button className="bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
+          <Button
+            
+            className="bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
+          >
             <Link href="/register">Register</Link>
           </Button>
         </div>
@@ -103,11 +103,8 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="rounded-full text-coffee-brown dark:text-warm-ivory"
           >
-            {isDark ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
+            <Sun className="hidden h-5 w-5 dark:block" />
+            <Moon className="h-5 w-5 dark:hidden" />
           </Button>
 
           <Button
@@ -141,6 +138,7 @@ const Navbar = () => {
 
           <div className="mt-5 flex gap-3 border-t border-border pt-5">
             <Button
+              
               variant="outline"
               className="flex-1 border-coffee-brown text-coffee-brown hover:bg-terracotta dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
             >
@@ -149,7 +147,10 @@ const Navbar = () => {
               </Link>
             </Button>
 
-            <Button className="flex-1 bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
+            <Button
+              
+              className="flex-1 bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
+            >
               <Link href="/register" onClick={closeMenu}>
                 Register
               </Link>

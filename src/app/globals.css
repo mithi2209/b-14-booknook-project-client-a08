@@ -3,7 +3,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* =================================
    THEME CONFIGURATION
@@ -216,6 +216,7 @@
 
   body {
     @apply bg-background text-foreground;
+
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
@@ -243,7 +244,6 @@
 
 .booknook-swiper .swiper-button-prev:hover,
 .booknook-swiper .swiper-button-next:hover {
-  
   color: #49372D;
 }
 

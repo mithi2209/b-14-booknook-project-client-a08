@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -35,10 +34,9 @@ const itemVariants = {
   },
 };
 
-
 const TopCategories = () => {
-    return (
- <section className="bg-deep-olive px-4 py-9 sm:py-11">
+  return (
+    <section className="bg-deep-olive px-4 py-9 transition-colors duration-300 sm:py-11">
       <div className="container mx-auto">
         {/* Section Heading */}
         <motion.div
@@ -49,21 +47,21 @@ const TopCategories = () => {
           className="mb-5 flex items-start justify-between"
         >
           <div>
-            <p className="mb-2 text-[11px] font-semibold tracking-[0.2em] text-sunny-yellow">
+            <p className="mb-2 text-[11px] font-semibold tracking-[0.2em] text-sunny-yellow dark:text-warm-ivory">
               BOOKNOOK COLLECTIONS
             </p>
 
-            <h2 className="text-2xl font-bold text-warm-ivory sm:text-3xl lg:text-4xl">
+            <h2 className="text-2xl font-bold text-warm-ivory dark:text-warm-ivory sm:text-3xl lg:text-4xl">
               A world beyond the pages.
             </h2>
 
-            <p className="mt-2 max-w-xl text-sm leading-6 text-warm-ivory/80">
-              Thoughtfully selected collections for curious minds and
-              passionate readers.
+            <p className="mt-2 max-w-xl text-sm leading-6 text-warm-ivory/85 dark:text-warm-ivory/75">
+              Thoughtfully selected collections for curious minds and passionate
+              readers.
             </p>
           </div>
 
-          <span className="hidden text-xs font-medium text-sunny-yellow sm:block">
+          <span className="hidden text-xs font-medium text-sunny-yellow dark:text-warm-ivory sm:block">
             01 — 08
           </span>
         </motion.div>
@@ -93,7 +91,7 @@ const TopCategories = () => {
 
           <Link
             href="/categories"
-            className="flex items-center gap-1 text-xs font-semibold text-sunny-yellow transition-colors hover:text-terracotta"
+            className="flex items-center gap-1 text-xs font-semibold text-sunny-yellow transition-colors hover:text-terracotta dark:text-warm-ivory dark:hover:text-sunny-yellow"
           >
             DISCOVER ALL
             <ArrowUpRight size={15} />
@@ -112,19 +110,19 @@ const TopCategories = () => {
             <motion.div key={category.slug} variants={itemVariants}>
               <Link
                 href={`/categories/${category.slug}`}
-                className="group flex items-center gap-3 border-b border-warm-ivory/30 py-3 transition-all duration-300 hover:pl-2"
+                className="group flex items-center gap-3 border-b border-warm-ivory/30 py-3 transition-all duration-300 hover:pl-2 dark:border-warm-ivory/20"
               >
-                <span className="text-[11px] text-sunny-yellow">
+                <span className="text-[11px] text-sunny-yellow dark:text-warm-ivory/80">
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
-                <span className="flex-1 text-base font-medium text-warm-ivory transition-colors group-hover:text-sunny-yellow sm:text-lg">
+                <span className="flex-1 text-base font-medium text-warm-ivory transition-colors group-hover:text-sunny-yellow dark:text-warm-ivory dark:group-hover:text-sunny-yellow sm:text-lg">
                   {category.name}
                 </span>
 
                 <ArrowUpRight
                   size={17}
-                  className="text-sunny-yellow/80 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+                  className="text-warm-ivory/80 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-sunny-yellow"
                 />
               </Link>
             </motion.div>
@@ -132,7 +130,7 @@ const TopCategories = () => {
         </motion.div>
       </div>
     </section>
-    );
+  );
 };
 
 export default TopCategories;

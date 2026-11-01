@@ -5,6 +5,8 @@ import NewArrivals from "@/components/homepage/NewArrivals";
 import BannerSlider from "@/components/homepage/BannerSlider";
 import TopCategories from "@/components/homepage/TopCategories";
 import HowBorrowingBooks from "@/components/homepage/HowBorrowingBooks";
+import FeaturedAuthors from "@/components/homepage/FeaturedAuthors";
+import ReadersReviews from "@/components/homepage/ReadersReviews";
 
 
 
@@ -23,6 +25,8 @@ export default function HomePage() {
       <NewArrivals />
 
       <TopCategories />
+      <FeaturedAuthors/>
+      <ReadersReviews/>
     </>
   );
 }

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Nunito_Sans } from "next/font/google";
+import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 
-const nunitoSans= Nunito_Sans({
+const josefinSans= Josefin_Sans({
  
   subsets: ["latin"],
 });
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${nunitoSans.className}  h-full antialiased`}
+      className={`${josefinSans.className}  h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}  

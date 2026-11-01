@@ -5,8 +5,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* =================================
+   THEME CONFIGURATION
+================================= */
+
 @theme inline {
-  /* BookNook palette */
+  /* BookNook colors */
   --color-terracotta: var(--terracotta);
   --color-warm-ivory: var(--warm-ivory);
   --color-dusty-rose: var(--dusty-rose);
@@ -16,7 +20,7 @@
   --color-deep-olive: var(--deep-olive);
   --color-hero: var(--hero);
 
-  /* shadcn theme colors */
+  /* shadcn colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -36,14 +40,14 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Charts */
+  /* Chart colors */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  /* Sidebar */
+  /* Sidebar colors */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -73,7 +77,7 @@
 ================================= */
 
 :root {
-  /* Original BookNook colors */
+  /* Original BookNook palette */
   --terracotta: #E8BFA5;
   --warm-ivory: #FAF0DF;
   --dusty-rose: #DDAEBA;
@@ -85,10 +89,11 @@
   --deep-olive: #85896B;
   --hero: #85896B;
 
-  /* Main website colors */
+  /* Main website */
   --background: #FAF0DF;
   --foreground: #49372D;
 
+  /* Cards */
   --card: #FFF9F0;
   --card-foreground: #49372D;
 
@@ -106,11 +111,13 @@
   --muted: #F0E2D4;
   --muted-foreground: #6D584A;
 
+  /* Accents */
   --accent: #E8BFA5;
   --accent-foreground: #49372D;
 
   --destructive: #B94A48;
 
+  /* Borders */
   --border: #E8BFA5;
   --input: #E8BFA5;
   --ring: #85896B;
@@ -140,7 +147,7 @@
 ================================= */
 
 .dark {
-  /* Main page: deep olive green */
+  /* Main background */
   --background: #30392F;
   --foreground: #FAF0DF;
 
@@ -162,12 +169,13 @@
   --muted: #85896B;
   --muted-foreground: #FAF0DF;
 
-  /* Terracotta accents */
+  /* Accents */
   --accent: #E8BFA5;
   --accent-foreground: #49372D;
 
   --destructive: #EF7773;
 
+  /* Borders */
   --border: #69745D;
   --input: #69745D;
   --ring: #EFCF83;
@@ -211,5 +219,73 @@
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+  }
+}
+
+/* =================================
+   BOOKNOOK SWIPER STYLES
+================================= */
+
+.booknook-swiper {
+  --swiper-theme-color: #FAF0DF;
+  --swiper-navigation-size: 20px;
+}
+
+/* Navigation arrows */
+
+.booknook-swiper .swiper-button-prev,
+.booknook-swiper .swiper-button-next {
+  width: 42px;
+  height: 42px;
+  color: #FAF0DF;
+  transition: all 0.3s ease;
+}
+
+.booknook-swiper .swiper-button-prev:hover,
+.booknook-swiper .swiper-button-next:hover {
+  
+  color: #49372D;
+}
+
+.booknook-swiper .swiper-button-prev {
+  left: 15px;
+}
+
+.booknook-swiper .swiper-button-next {
+  right: 15px;
+}
+
+/* Pagination */
+
+.booknook-swiper .swiper-pagination {
+  bottom: 18px !important;
+}
+
+.booknook-swiper .swiper-pagination-bullet {
+  width: 9px;
+  height: 9px;
+  background-color: #FAF0DF;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.booknook-swiper .swiper-pagination-bullet-active {
+  width: 25px;
+  border-radius: 10px;
+  background-color: #EFCF83;
+  opacity: 1;
+}
+
+/* Smaller navigation on mobile */
+
+@media (max-width: 640px) {
+  .booknook-swiper {
+    --swiper-navigation-size: 16px;
+  }
+
+  .booknook-swiper .swiper-button-prev,
+  .booknook-swiper .swiper-button-next {
+    width: 32px;
+    height: 32px;
   }
 }

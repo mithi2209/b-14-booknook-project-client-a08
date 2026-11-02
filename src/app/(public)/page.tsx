@@ -19,10 +19,10 @@ export default function HomePage() {
   return (
     <>
       <BannerSlider />
-
+      <NewArrivals />
       <HowBorrowingBooks/>
 
-      <NewArrivals />
+      
 
       <TopCategories />
       <FeaturedAuthors/>

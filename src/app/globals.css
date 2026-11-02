@@ -310,9 +310,17 @@
 /* Tablet */
 @media (min-width: 640px) and (max-width: 1023px) {
   .footer-bg {
+    background-image: none;
+    background-color: var(--warm-ivory);
+   
+  }
 
-    background-size: 100% 100%;
-    background-position:center top;
+  /* 
+  Dark Mode */
+  .dark .footer-bg {
+    background-image: none;
+    background-color: var(--background);
+
   }
 
 }

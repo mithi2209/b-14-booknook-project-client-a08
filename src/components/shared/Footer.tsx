@@ -27,7 +27,7 @@ const Footer = () => {
       <div className="container mx-auto px-5 py-10 sm:px-8 sm:py-12 lg:px-6">
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-2 items-start justify-items-start gap-5  text-center md:grid-cols-2 md:items-start md:gap-8 lg:grid-cols-4 lg:gap-8 lg:text-left divide-y-0 divide-[#B9A98D]/70 md:divide-y-0  lg:divide-x lg:divide-y-0 dark:divide-[#626B50] lg:items-stretch">
+        <div className="grid grid-cols-2 items-start justify-items-start gap-5  text-center md:grid-cols-2 md:items-start md:gap-4 lg:grid-cols-4 lg:gap-8 lg:text-left divide-y-0 divide-[#B9A98D]/70 md:divide-y-0  lg:divide-x lg:divide-y-0 dark:divide-[#626B50] lg:items-stretch">
 
 
           {/* Logo and Description */}
@@ -93,8 +93,8 @@ const Footer = () => {
           </div>
 
            {/* Contact Information */}
-          <div className="w-full space-y-2 py-0 md:py-0 lg:px-6 ">
-            <h3 className="text-2xl font-bold mr-6  ">
+          <div className="w-full space-y-4 py-0 md:py-0 md:px-5 px-0 lg:px-6 ">
+            <h3 className="text-2xl font-bold mr-6 md:mr-44 lg:mr-0  ">
               Contact Us
             </h3>
 
@@ -123,7 +123,7 @@ const Footer = () => {
           </div>
 
           {/* Social Links */}
-          <div className="w-full space-y-2 md:space-y-4  md:col-span-2 md:py-0 lg:col-span-1 lg:px-6  ">
+          <div className="w-full space-y-2 md:space-y-4  md:col-span-0 md:py-0 lg:col-span-1 lg:px-6  ">
             <h3 className="text-2xl font-bold">Social Links</h3>
 
             <div className="flex items-center justify-center gap-3 pt-2 lg:justify-start">

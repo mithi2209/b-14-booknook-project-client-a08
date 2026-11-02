@@ -33,11 +33,12 @@ import {
 
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { data } from "framer-motion/client";
+
 
 const RegisterForm = () => {
 
-   const router = useRouter();
+    const router = useRouter();
+    
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [isRegister, setIsRegister] = useState(false);
@@ -76,10 +77,8 @@ const RegisterForm = () => {
       const password = String(formData.get("password") ?? "");
       const photoURL = String(formData.get("photoURL") ?? "").trim();
 
-      // if (!name) {
-      //   toast.error("Please enter your full name.");
-      //   return;
-      // }
+
+      console.log(name,email,password,photoURL ,"from registerrr");
 
       const error = validatePassword(password);
 
@@ -119,7 +118,7 @@ const RegisterForm = () => {
       } 
       catch (error) {
       
-        toast.error("Registration failed");
+        toast.error(`Registration failed : ${error instanceof Error ? error.message : "An unexpected error occurred."}`);
       } 
       finally {
       
@@ -162,7 +161,7 @@ const RegisterForm = () => {
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
                   <Input
-                    id="name"
+                    name="name"
                     type="text"
                     placeholder="Enter your full name"
                     required
@@ -237,7 +236,7 @@ const RegisterForm = () => {
                   <Input
                     id="password"
                     name="password"
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     placeholder="Create a password"
                     autoComplete="new-password"
                     required
@@ -288,7 +287,7 @@ const RegisterForm = () => {
                   "Register Account"
                 )}
               </Button>
-            </form>
+           
 
             {/* Divider */}
             <div className="my-3 flex items-center gap-3">
@@ -317,6 +316,8 @@ const RegisterForm = () => {
                 Login
               </Link>
             </p>
+
+           </form>
           </CardContent>
         </Card>
 

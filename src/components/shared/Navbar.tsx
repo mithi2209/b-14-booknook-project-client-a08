@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { BookOpen, Menu, X, Sun, Moon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import AuthButtons from "@/components/shared/AuthButtons";
+
 
 export const navLinks = [
   { label: "Home", href: "/" },
@@ -17,6 +19,7 @@ export const navLinks = [
 ];
 
 const Navbar = () => {
+
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -80,18 +83,12 @@ const Navbar = () => {
             <Moon className="h-5 w-5 dark:hidden" />
           </Button>
 
-          {/* Login */}
-          <Button
-            variant="outline"
-            className="border-coffee-brown bg-transparent text-coffee-brown hover:bg-terracotta hover:text-coffee-brown dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
+            {/* Divider before Profile */}
+            <div className="mx-2 h-8 w-px bg-border" />
 
-          {/* Register */}
-          <Button className="bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
-            <Link href="/register">Register</Link>
-          </Button>
+          {/* user auth btn: login /register/profile */}
+          <AuthButtons></AuthButtons>
+
         </div>
 
         {/* Mobile Actions */}
@@ -121,9 +118,14 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="border-t border-border bg-background px-5 py-5 shadow-md lg:hidden">
-          <nav className="flex flex-col gap-4">
+        {isOpen && (
+            <div className="
+              max-h-[calc(100dvh-4.5rem)]
+              overflow-y-auto overscroll-contain
+              border-t border-border
+              bg-background px-5 py-5 shadow-md lg:hidden
+            ">
+          <div className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -138,23 +140,11 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-          </nav>
+          </div>
 
+           {/* user auth btn: login /register/profile */}
           <div className="mt-5 flex gap-3 border-t border-border pt-5">
-            <Button
-              variant="outline"
-              className="flex-1 border-coffee-brown text-coffee-brown hover:bg-terracotta dark:border-warm-ivory dark:text-warm-ivory dark:hover:bg-muted-sage dark:hover:text-coffee-brown"
-            >
-              <Link href="/login" onClick={closeMenu}>
-                Login
-              </Link>
-            </Button>
-
-            <Button className="flex-1 bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta">
-              <Link href="/register" onClick={closeMenu}>
-                Register
-              </Link>
-            </Button>
+              <AuthButtons onNavigate={closeMenu}></AuthButtons>
           </div>
         </div>
       )}

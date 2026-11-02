@@ -1,27 +1,81 @@
 "use client";
 
 import Link from "next/link";
+
+import { toast } from "sonner"; 
 import { useState } from "react";
-
-import { ArrowLeft, BookOpen, Eye, EyeOff, Lock, Mail } from "lucide-react";
-
 import { FcGoogle } from "react-icons/fc";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, BookOpen, Eye, EyeOff, Lock, Mail } from "lucide-react";
+
+import { useRouter } from "next/navigation";
+import { authClient } from '../../../../lib/auth-client';
+
+
+
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const handleLogin = async(e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Connect your Better Auth login function here.
-    console.log({ email, password });
+    if (isLogin) return;
+
+    const formData = new FormData( e.currentTarget );
+
+    const user = Object.fromEntries(formData.entries()) as {email:string , password:string} ;
+
+    //   const { data, error } = await authClient.signIn.email({
+    //   ...user,
+    //   callbackURL : "/",
+    // })
+
+    console.log(user);
+
+    try {
+        
+        const { data, error } = await authClient.signIn.email({
+         ...user,
+        callbackURL : "/",
+        });
+
+      
+        if (error) {
+          toast.error(error.message || "Login failed.");
+          return;
+        }
+
+      
+        if (data) {
+          toast.success("Login successful...");
+          router.push("/");
+          return;
+        }
+
+        toast.error("Login failed. Please try again.");
+      } 
+
+      catch (error) {
+      
+        toast.error(`Login failed : ${error instanceof Error ? error.message : "An unexpected error occurred."}`);
+      } 
+      finally {
+      
+      setIsLogin(false);
+      }
+
+
   };
 
   return (
@@ -45,9 +99,12 @@ const LoginForm = () => {
         </div>
 
         {/* Login Card */}
-        <Card className="gap-0 border-[#E8BFA5] bg-[#FFF9F0] py-5 lg:py-7 pt-2 shadow-md dark:border-[#69745D] dark:bg-[#3F4A3A]">
+        <Card className="gap-0 border-[#E8BFA5] bg-[#FFF9F0] py-5 lg:py-7
+         pt-2 shadow-md dark:border-[#69745D] dark:bg-[#3F4A3A]">
+
           <CardContent className="px-5 py-5  sm:px-6">
-            <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-6">
+
+            <form onSubmit={ handleLogin} className="space-y-3 lg:space-y-6">
               {/* Email */}
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email Address</Label>
@@ -56,11 +113,11 @@ const LoginForm = () => {
                   <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
 
                   <Input
-                    id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    // value={email}
+                    // onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     required
                     className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
@@ -85,11 +142,12 @@ const LoginForm = () => {
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
 
                   <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    type="password"
+                    // type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    // value={password}
+                    // onChange={(e) => setPassword(e.target.value)}
                     autoComplete="current-password"
                     required
                     className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 pr-11 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
@@ -119,7 +177,7 @@ const LoginForm = () => {
               >
                 Login
               </Button>
-            </form>
+            
 
             {/* Divider */}
             <div className="my-3 flex items-center gap-3">
@@ -150,6 +208,7 @@ const LoginForm = () => {
                 Register
               </Link>
             </p>
+          </form>
           </CardContent>
         </Card>
 

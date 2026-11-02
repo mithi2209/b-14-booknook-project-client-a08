@@ -11,7 +11,7 @@ import ReadersReviews from "@/components/homepage/ReadersReviews";
 
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home | BookNook ",
   description: "Welcome to BookNook, your online library.",
 };
 

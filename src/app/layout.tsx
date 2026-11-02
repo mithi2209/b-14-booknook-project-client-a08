@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from "sonner";
 import ThemeProvider from "@/components/theme-provider/ThemeProvider";
 
 const josefinSans= Josefin_Sans({
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
         {children} 
         </ThemeProvider>
-        <ToastContainer/> 
+         <Toaster position="top-right" richColors />
       </body>
     </html>
   );

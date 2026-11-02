@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, A11y } from "swiper/modules";
 
-import book1 from "@/assets/images/book1.avif";
+import book1 from "@/assets/images/images.jpg";
 import book2 from "@/assets/images/book2 (2).jpg";
 import book3 from "@/assets/images/adventure.jpg";
 import book4 from "@/assets/images/adventure2.jpg";

@@ -29,7 +29,6 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="grid grid-cols-2 items-start justify-items-start gap-5  text-center md:grid-cols-2 md:items-start md:gap-8 lg:grid-cols-4 lg:gap-8 lg:text-left divide-y-0 divide-[#B9A98D]/70 md:divide-y-0  lg:divide-x lg:divide-y-0 dark:divide-[#626B50] lg:items-stretch">
 
-        {/* grid grid-cols-1 items-center gap-8 divide-y-0 divide-[#B9A98D]/70 text-center md:grid-cols-2 md:items-start md:divide-y-0 md:gap-8 lg:grid-cols-4 lg:divide-x lg:divide-y-0 lg:gap-0 lg:text-left dark:divide-[#626B50] */}
 
           {/* Logo and Description */}
           <div className="w-full space-y-4 pb-0 lg:pr-6 col-span-2 lg:col-span-1 ">

@@ -3,19 +3,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import { BookOpen, Menu, X, Sun, Moon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "All Books", href: "/books" },
-  { name: "Add Book", href: "/add-books" },
-  { name: "My Books", href: "/my-books" },
-  { name: "My Borrows", href: "/my-borrows" },
+  { label: "Home", href: "/" },
+  { label: "All Books", href: "/all-books"},
+  { label: "Add Book", href: "/add-books" },
+  { label: "My Books", href: "/my-books" },
+  { label: "My Borrows", href: "/my-borrows" },
 ];
 
 const Navbar = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -53,9 +55,13 @@ const Navbar = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap text-sm font-medium text-coffee-brown transition-colors hover:text-deep-olive dark:text-warm-ivory dark:hover:text-sunny-yellow"
-            >
-              {link.name}
+              className={`whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors 
+                ${
+                  pathname === link.href
+                    ? "text-deep-olive dark:text-sunny-yellow"
+                    : "text-coffee-brown dark:text-warm-ivory "
+             }`}>
+              {link.label}
             </Link>
           ))}
         </nav>
@@ -123,9 +129,13 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="font-medium text-coffee-brown hover:text-deep-olive dark:text-warm-ivory dark:hover:text-sunny-yellow"
-              >
-                {link.name}
+                className={`whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors 
+                  ${
+                    pathname === link.href
+                      ? "bg-muted-sage text-deep-olive dark:bg-deep-olive dark:text-sunny-yellow"
+                      : "text-coffee-brown hover:bg-muted-sage hover:text-deep-olive dark:text-warm-ivory dark:hover:bg-deep-olive dark:hover:text-sunny-yellow"
+                }`}>
+                {link.label}
               </Link>
             ))}
           </nav>

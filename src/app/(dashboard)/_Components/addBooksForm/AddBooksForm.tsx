@@ -89,12 +89,12 @@ const AddBooksForm = () => {
 
         {/* Back Link */}
         <Link
-          href="/dashboard"
+          href="/"
           className="mb-6 inline-flex items-center gap-2 text-sm
           text-muted-foreground transition hover:text-primary"
         >
           <ArrowLeft size={16} />
-          Back to Dashboard
+          Back to home
         </Link>
 
         {/* Add Book Form */}

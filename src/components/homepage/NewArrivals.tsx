@@ -14,18 +14,18 @@ const NewArrivals = async () => {
   const books: TBook[] = await res.json();
 
   return (
-    <section className=" py-16 bg-[#FAF0DF]  dark:bg-[#202820]md:py-20">
+    <section className=" py-16 bg-warm-ivory dark:bg-[#30392F] transition-colors duration-300 md:py-20">
       <div className="mx-auto container px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#78845b] ">
+          <p className="mmb-2 text-xs font-semibold tracking-[0.2em] text-deep-olive dark:text-sunny-yellow ">
             New Added Books
           </p>
 
-          <h2 className="text-3xl text-coffee-brown font-bold dark:text-warm-ivory md:text-4xl">
+          <h2 className="text-3xl font-bold text-coffee-brown dark:text-warm-ivory sm:text-4xl">
             New Arrivals
           </h2>
 
-          <p className="mt-3 text-stone-500 dark:text-stone-400">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-coffee-brown/75 dark:text-warm-ivory/70">
             Explore the latest additions to our book collection.
           </p>
         </div>
@@ -47,7 +47,7 @@ const NewArrivals = async () => {
 
         <div className="mt-10 text-center">
           <Link
-            href="/books"
+            href="/all-books"
             className="inline-flex items-center gap-2 rounded-lg bg-[#78845b] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#657149]"
           >
             See All Books

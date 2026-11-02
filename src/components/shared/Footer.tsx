@@ -16,7 +16,7 @@ const Footer = () => {
 
     <footer
 
-      className="footer-bg border-t border-border bg-[#FAF0DF] text-[#49372D] dark:bg-[#30392F] dark:text-[#FAF0DF]"
+      className="footer-bg border-t border-border bg-[#FAF0DF] text-[#49372D] dark:bg-[#30392F] dark:text-[#FAF0DF] mt-6 md:mt-8 lg:mt-12"
       style={
         {
           "--footer-light": `url("${footerLight.src}")`,

@@ -17,7 +17,9 @@ import {
   User,
   Image as ImageIcon,
   Upload,
+  LoaderCircle, 
 } from "lucide-react";
+import { toast } from "sonner"; 
 
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
@@ -29,39 +31,101 @@ import {
 } from "@/components/ui/card";
 
 
-
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { data } from "framer-motion/client";
 
 const RegisterForm = () => {
+
+   const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState("");
+    const [isRegister, setIsRegister] = useState(false);
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
   
-   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [photoURL, setPhotoURL] = useState("");
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
 
-  const validatePassword = (value: string) => {
-    if (value.length < 6) return "Password must be at least 6 characters.";
-    if (!/[A-Z]/.test(value)) return "Add at least one uppercase letter.";
-    if (!/[a-z]/.test(value)) return "Add at least one lowercase letter.";
-    return "";
-  };
+    const validatePassword = (value: string) => {
+      if (value.length < 6) {
+        return "Password must be at least 6 characters.";
+      }
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+      if (!/[A-Z]/.test(value)) {
+        return "Add at least one uppercase letter.";
+      }
+
+      if (!/[a-z]/.test(value)) {
+        return "Add at least one lowercase letter.";
+      }
+
+      if (!/[0-9]/.test(value)) {
+        return "Add at least one number.";
+      }
+
+      return "";
+    };
+
+  const handleRegister = async(e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const error = validatePassword(password);
+      if (isRegister) return;
 
-    if (error) {
-      setPasswordError(error);
-      return;
-    }
+      const formData = new FormData(e.currentTarget);
 
-    setPasswordError("");
+      const name = String(formData.get("name") ?? "").trim();
+      const email = String(formData.get("email") ?? "").trim();
+      const password = String(formData.get("password") ?? "");
+      const photoURL = String(formData.get("photoURL") ?? "").trim();
 
-    // Connect your registration API/authentication here.
-    console.log({ name, email, password, photoURL, photoFile });
+      // if (!name) {
+      //   toast.error("Please enter your full name.");
+      //   return;
+      // }
+
+      const error = validatePassword(password);
+
+      if (error) {
+        setPasswordError(error);
+        return;
+      }
+
+      setPasswordError("");
+      setIsRegister(true);
+
+      try {
+        
+        const { data, error } = await authClient.signUp.email({
+          name,
+          email,
+          password,
+          image: photoURL || undefined,
+          callbackURL: "/login",
+        });
+
+      
+        if (error) {
+          toast.error(error.message || "Registration failed.");
+          return;
+        }
+
+      
+        if (data) {
+          toast.success("Registration successful! Please log in.");
+          router.push("/login");
+          return;
+        }
+
+
+        toast.error("Registration failed. Please try again.");
+      } 
+      catch (error) {
+      
+        toast.error("Registration failed");
+      } 
+      finally {
+      
+      setIsRegister(false);
+      }
+   
   };
 
     return (
@@ -89,7 +153,8 @@ const RegisterForm = () => {
         {/* Register Card */}
         <Card className="gap-0 border-[#E8BFA5] bg-[#FFF9F0] py-5 pt-2 lg:mt-8 shadow-md dark:border-[#69745D] dark:bg-[#3F4A3A]">
           <CardContent className="px-5 sm:px-6 py-5">
-            <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-6">
+
+            <form onSubmit={handleRegister} className="space-y-3 lg:space-y-6">
 
               {/* Name */}
               <div className="space-y-1.5">
@@ -100,8 +165,6 @@ const RegisterForm = () => {
                     id="name"
                     type="text"
                     placeholder="Enter your full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     required
                     className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
                   />
@@ -115,10 +178,9 @@ const RegisterForm = () => {
                   <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     required
                     className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
                   />
@@ -137,30 +199,27 @@ const RegisterForm = () => {
 
                     <ImageIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
                     <Input
+                      id="photoURL"
+                      name="photoURL"
                       type="url"
                       placeholder="Paste photo URL"
-                      value={photoURL}
-                      onChange={(e) => {
-                        setPhotoURL(e.target.value);
-                        setPhotoFile(null);
-                      }}
                       className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
                     />
                   </div>
 
-                  <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-[145px]">
+                  <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-36.25">
                     <Upload className="h-4 w-4" />
-                    <span className="max-w-[105px] truncate">
+                    <span className="max-w-26.25 truncate">
                       {photoFile ? photoFile.name : "Upload Photo"}
                     </span>
                     <input
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        setPhotoFile(file);
-                        if (file) setPhotoURL("");
+                      onChange={() => {
+                        toast.info(
+                          "File uploads need to be connected to your image storage."
+                        );
                       }}
                     />
                   </label>
@@ -177,14 +236,15 @@ const RegisterForm = () => {
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
                   <Input
                     id="password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setPasswordError("");
-                    }}
+                    autoComplete="new-password"
                     required
+                    onChange={(e) => {
+                        setPasswordError(validatePassword(e.target.value));
+                      }}
+                    
                     className="border-[#D5C6A9] bg-[#FAF0DF] pl-10 pr-11 focus-visible:ring-[#85896B] dark:border-[#69745D] dark:bg-[#30392F]"
                   />
 
@@ -216,9 +276,17 @@ const RegisterForm = () => {
               {/* Register Button */}
               <Button
                 type="submit"
+                disabled={isRegister}
                 className="w-full  font-semibold bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
               >
-                Register Account
+                 {isRegister ? (
+                  <>
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    Creating Account...
+                  </>
+                ) : (
+                  "Register Account"
+                )}
               </Button>
             </form>
 

@@ -11,13 +11,13 @@ import ProtectedSidebar from "./_Components/sidebar/ProtectedSidebar";
 
 
 export default async function DashboardLayout({ children }: LayoutProps<"/">) {
-//   const session = await auth.api.getSession({
-//     headers: await headers(),
-//   });
+  // const session = await auth.api.getSession({
+  //   headers: await headers(),
+  // });
 
-//   if (!session) {
-//     redirect("/login");
-//   }
+  // if (!session) {
+  //   redirect("/login");
+  // }
 
   return (
      <div className="flex min-h-screen flex-col bg-background lg:flex-row">

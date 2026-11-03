@@ -23,8 +23,11 @@ const ProfileTrigger = ({
   onToggle,
   onNavigate,
 }: ProfileTriggerProps) => {
+
   return (
+
     <Button
+    
       variant="outline"
       type="button"
       onClick={onToggle}

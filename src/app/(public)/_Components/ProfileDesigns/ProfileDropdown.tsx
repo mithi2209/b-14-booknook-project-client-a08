@@ -1,15 +1,6 @@
-
-
-
 "use client";
 
-import {
-  UserRound,
-  ChevronDown,
-  LogOut,
-  Pencil,
-  BookOpen,
-} from "lucide-react";
+import { UserRound, ChevronDown, LogOut, Pencil, BookOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type ProfileUser = {
@@ -32,7 +23,8 @@ const ProfileDropdown = ({
   onSignOut,
 }: ProfileDropdownProps) => {
 
-    const router = useRouter();
+  const router = useRouter();
+
   return (
     <>
       {/* Outside Click - Desktop Only */}
@@ -107,10 +99,10 @@ const ProfileDropdown = ({
         <div className="space-y-1 py-2">
           {/* My Profile */}
           <button
-          onClick={() => {
-                onClose();
-                onNavigate?.();
-                router.push("/my-profile");
+            onClick={() => {
+              onClose();
+              onNavigate?.();
+              router.push("/my-profile");
             }}
             className="
               flex w-full items-center gap-3 rounded-xl
@@ -136,7 +128,7 @@ const ProfileDropdown = ({
             onClick={() => {
               onClose();
               onNavigate?.();
-              window.location.href = "/profile/edit";
+              router.push("/my-profile/profile-update")
             }}
             className="
               flex w-full items-center gap-3 rounded-xl
@@ -178,7 +170,6 @@ const ProfileDropdown = ({
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#B94A48]/10 dark:bg-[#EF7773]/10">
               <LogOut size={17} />
             </span>
-
             Sign Out
           </button>
         </div>

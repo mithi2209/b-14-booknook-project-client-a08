@@ -20,6 +20,15 @@ export type TBook = {
 
 
 
+export type TUser = {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+};
+
+
+
 
 
 

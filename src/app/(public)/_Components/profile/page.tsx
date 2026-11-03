@@ -1,15 +1,11 @@
-
-
 "use client";
 
+import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
 import { authClient } from "@/lib/auth-client";
 import ProfileTrigger from "../ProfileDesigns/ProfileTrigger";
 import ProfileDropdown from "../ProfileDesigns/ProfileDropdown";
-
 
 type ProfileUser = {
   name?: string | null;
@@ -23,8 +19,8 @@ type ProfileProps = {
 };
 
 const ProfilePage = ({ user, onNavigate }: ProfileProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   // Sign Out
   const handleSignOut = async () => {
@@ -40,8 +36,8 @@ const ProfilePage = ({ user, onNavigate }: ProfileProps) => {
   };
 
   return (
+    
     <div className={`relative ${onNavigate ? "w-full" : "w-fit"}`}>
-
       {/* Profile Trigger */}
       <ProfileTrigger
         user={user}
@@ -59,7 +55,6 @@ const ProfilePage = ({ user, onNavigate }: ProfileProps) => {
           onSignOut={handleSignOut}
         />
       )}
-
     </div>
   );
 };

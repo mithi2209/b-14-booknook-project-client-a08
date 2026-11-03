@@ -8,9 +8,16 @@ import {
   ClipboardList,
   Bookmark,
   ChevronRight,
+  UserRound,
+  House,
 } from "lucide-react";
 
 const menuItems = [
+  {
+  title: "Home",
+  href: "/",
+  icon: House,
+  },
   {
     title: "My Books",
     href: "/my-books",
@@ -26,6 +33,12 @@ const menuItems = [
     href: "/my-borrow",
     icon: ClipboardList,
   },
+  {
+  title: "My Profile",
+  href: "/my-profile",
+  icon: UserRound,
+},
+
  
 ];
 

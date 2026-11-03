@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { toast } from "sonner"; 
+import { toast } from "sonner";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -10,72 +10,90 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, BookOpen, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  LoaderCircle,
+} from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { authClient } from '../../../../lib/auth-client';
-
-
-
+import { authClient } from "../../../../lib/auth-client";
 
 const LoginForm = () => {
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const router = useRouter();
-
-  const [showPassword, setShowPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const handleLogin = async(e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isLogin) return;
+    if (isLogin || isGoogleLoading) return;
 
-    const formData = new FormData( e.currentTarget );
+    const formData = new FormData(e.currentTarget);
 
-    const user = Object.fromEntries(formData.entries()) as {email:string , password:string} ;
+    const user = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
 
-    //   const { data, error } = await authClient.signIn.email({
-    //   ...user,
-    //   callbackURL : "/",
-    // })
-
-    console.log(user);
+    setIsLogin(true);
 
     try {
-        
-        const { data, error } = await authClient.signIn.email({
-         ...user,
-        callbackURL : "/",
-        });
+      const { data, error } = await authClient.signIn.email({
+        ...user,
+        callbackURL: "/",
+      });
 
-      
-        if (error) {
-          toast.error(error.message || "Login failed.");
-          return;
-        }
-
-      
-        if (data) {
-          toast.success("Login successful...");
-          router.push("/");
-          return;
-        }
-
-        toast.error("Login failed. Please try again.");
-      } 
-
-      catch (error) {
-      
-        toast.error(`Login failed : ${error instanceof Error ? error.message : "An unexpected error occurred."}`);
-      } 
-      finally {
-      
-      setIsLogin(false);
+      if (error) {
+        toast.error(error.message || "Login failed.");
+        return;
       }
 
+      if (data) {
+        toast.success("Login successful...");
+        router.push("/");
+        return;
+      }
 
+      toast.error("Login failed. Please try again.");
+    } catch (error) {
+      toast.error(
+        `Login failed: ${
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."
+        }`,
+      );
+    } finally {
+      setIsLogin(false);
+    }
+  };
+
+  // GOOGLE SIGNIN
+  const handleGoogleSignIn = async () => {
+    if (isGoogleLoading || isLogin) return;
+
+    setIsGoogleLoading(true);
+
+    try {
+      const { error } = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+      });
+
+      if (error) {
+        toast.error(error.message || "Google sign in failed.");
+        setIsGoogleLoading(false);
+      }
+    } catch {
+      toast.error("Google sign in failed.");
+      setIsGoogleLoading(false);
+    }
   };
 
   return (
@@ -99,12 +117,12 @@ const LoginForm = () => {
         </div>
 
         {/* Login Card */}
-        <Card className="gap-0 border-[#E8BFA5] bg-[#FFF9F0] py-5 lg:py-7
-         pt-2 shadow-md dark:border-[#69745D] dark:bg-[#3F4A3A]">
-
+        <Card
+          className="gap-0 border-[#E8BFA5] bg-[#FFF9F0] py-5 lg:py-7
+         pt-2 shadow-md dark:border-[#69745D] dark:bg-[#3F4A3A]"
+        >
           <CardContent className="px-5 py-5  sm:px-6">
-
-            <form onSubmit={ handleLogin} className="space-y-3 lg:space-y-6">
+            <form onSubmit={handleLogin} className="space-y-3 lg:space-y-6">
               {/* Email */}
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email Address</Label>
@@ -143,8 +161,7 @@ const LoginForm = () => {
 
                   <Input
                     name="password"
-                    type="password"
-                    // type={showPassword ? "text" : "password"}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     // value={password}
                     // onChange={(e) => setPassword(e.target.value)}
@@ -173,42 +190,60 @@ const LoginForm = () => {
               {/* Login Button */}
               <Button
                 type="submit"
+                disabled={isLogin || isGoogleLoading}
                 className="w-full font-semibold bg-coffee-brown text-warm-ivory hover:bg-deep-olive dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta"
               >
-                Login
+                {isLogin ? (
+                  <>
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
-            
 
-            {/* Divider */}
-            <div className="my-3 flex items-center gap-3">
-              <div className="h-px flex-1 bg-[#D5C6A9] dark:bg-[#69745D]" />
+              {/* Divider */}
+              <div className="my-3 flex items-center gap-3">
+                <div className="h-px flex-1 bg-[#D5C6A9] dark:bg-[#69745D]" />
 
-              <span className="text-xs text-[#85896B]">OR CONTINUE WITH</span>
+                <span className="text-xs text-[#85896B]">OR CONTINUE WITH</span>
 
-              <div className="h-px flex-1 bg-[#D5C6A9] dark:bg-[#69745D]" />
-            </div>
+                <div className="h-px flex-1 bg-[#D5C6A9] dark:bg-[#69745D]" />
+              </div>
 
-            {/* Google Login */}
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full border-[#D5C6A9] bg-transparent hover:bg-[#A9B49A]/20 dark:border-[#69745D] dark:hover:bg-[#85896B]/20"
-            >
-              <FcGoogle className="h-5 w-5" />
-              Continue with Google
-            </Button>
-
-            {/* Register Link */}
-            <p className="mt-4 text-center text-sm text-[#6D584A] dark:text-[#D8DCCF]">
-              Don't have an account?{" "}
-              <Link
-                href="/register"
-                className="font-semibold text-[#73785C] underline-offset-4 hover:underline dark:text-[#EFCF83]"
+              {/* Google Login */}
+              <Button
+                onClick={handleGoogleSignIn}
+                type="button"
+                variant="outline"
+                disabled={isGoogleLoading || isLogin}
+                className="w-full border-[#D5C6A9] bg-transparent hover:bg-[#A9B49A]/20 dark:border-[#69745D] dark:hover:bg-[#85896B]/20"
               >
-                Register
-              </Link>
-            </p>
-          </form>
+                {isGoogleLoading ? (
+                  <>
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    Connecting to Google...
+                  </>
+                ) : (
+                  <>
+                    <FcGoogle className="h-5 w-5" />
+                    Continue with Google
+                  </>
+                )}
+              </Button>
+
+              {/* Register Link */}
+              <p className="mt-4 text-center text-sm text-[#6D584A] dark:text-[#D8DCCF]">
+                Don't have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold text-[#73785C] underline-offset-4 hover:underline dark:text-[#EFCF83]"
+                >
+                  Register
+                </Link>
+              </p>
+            </form>
           </CardContent>
         </Card>
 

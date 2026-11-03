@@ -134,7 +134,7 @@ const Navbar = () => {
                 className={`whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors 
                   ${
                     pathname === link.href
-                      ? "bg-muted-sage text-deep-olive dark:bg-deep-olive dark:text-sunny-yellow"
+                      ? "bg-muted-sage dark:bg-deep-olive dark:text-sunny-yellow"
                       : "text-coffee-brown hover:bg-muted-sage hover:text-deep-olive dark:text-warm-ivory dark:hover:bg-deep-olive dark:hover:text-sunny-yellow"
                 }`}>
                 {link.label}

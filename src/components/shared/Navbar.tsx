@@ -15,7 +15,7 @@ export const navLinks = [
   { label: "All Books", href: "/all-books"},
   { label: "Add Book", href: "/add-books" },
   { label: "My Books", href: "/my-books" },
-  { label: "My Borrows", href: "/my-borrows" },
+  { label: "Borrowed Books", href: "/my-borrowed-books" },
 ];
 
 const Navbar = () => {

@@ -1,7 +1,8 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState } from "react";
-import { BookOpen, Mail, UserRound } from "lucide-react";
+import { BookDownIcon, BookOpen, Mail, UserRound } from "lucide-react";
 
 import { TBook } from "@/lib/dataType";
 import { Button } from "@/components/ui/button";
@@ -14,39 +15,86 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { authClient } from "@/lib/auth-client";
 
 type Props = {
   book: TBook;
 };
 
 const BookBorrowModal = ({ book }: Props) => {
-  const [open, setOpen] = useState(false);
+ 
+    const [open, setOpen] = useState(false);
+    const [isBorrowing, setIsBorrowing] = useState(false);
+    const { data: session, isPending } = authClient.useSession();
 
-  const handleBorrow = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const userEmail = session?.user?.email;
+    
+
+  const handleBorrowBook = async(e:  React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Add borrowing API later.
-    setOpen(false);
+     if (!userEmail) {
+      toast.error("Please login first!");
+      return;
+    }
+
+    // posting borrowing API  to server.
+      try {
+
+        setIsBorrowing(true);
+
+        const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrow-books`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            bookId: book._id,
+            userEmail: userEmail,
+          }),
+        
+        }
+          
+        );
+            
+
+         const data = await res.json();
+
+
+          if (res.ok) {
+            toast.success(data.message);
+            setOpen(false);
+          } 
+          else {
+          toast.error(data.message || "Something went wrong!");
+          }
+      } 
+      catch (error) {
+          toast.error("Something went wrong. Please try again.");
+      }
+      finally{
+        setIsBorrowing(false);
+      }
+
   };
+
+
+
   return (
+
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button
-          className="group h-8 w-full rounded-xl border border-[#85896B] 
-          bg-[#85896B] text-[#FAF0DF] shadow-sm transition-all duration-300
-          hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md
-          dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-[#30392F]
-          dark:hover:bg-[#BCC6AC]"
-        >
-          <BookOpen
-            size={18}
-            className="mr-2 transition-transform duration-300 group-hover:-rotate-6"
-          />
-          Borrow This Book
-          <span className="ml-auto text-lg transition-transform duration-300 group-hover:translate-x-1">
-            →
-          </span>
-        </Button>
+      <DialogTrigger
+        className="group flex h-8 w-full items-center rounded-xl border border-[#85896B] bg-[#85896B] px-3 text-[#FAF0DF] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A]dark:text-[#30392F]dark:hover:bg-[#BCC6AC]">
+        <BookOpen
+          size={18}
+          className="mr-2 transition-transform duration-300 group-hover:-rotate-6"
+        />
+        Borrow This Book
+        <span className="ml-auto text-lg transition-transform duration-300 group-hover:translate-x-1">
+          →
+        </span>
       </DialogTrigger>
 
       <DialogContent className="w-[calc(100%-2rem)] rounded-2xl border-border bg-card sm:max-w-md">
@@ -61,7 +109,7 @@ const BookBorrowModal = ({ book }: Props) => {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleBorrow} className="space-y-5 pt-3">
+        <form onSubmit={handleBorrowBook} className="space-y-5 pt-3">
           <div className="space-y-2">
             <label className="text-sm font-medium">User Name</label>
 
@@ -73,7 +121,7 @@ const BookBorrowModal = ({ book }: Props) => {
 
               <input
                 type="text"
-                value="John Doe"
+                value={session?.user?.name || ""}
                 readOnly
                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
               />
@@ -91,7 +139,7 @@ const BookBorrowModal = ({ book }: Props) => {
 
               <input
                 type="email"
-                value="john@example.com"
+                value={userEmail || ""}
                 readOnly
                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
               />
@@ -100,9 +148,12 @@ const BookBorrowModal = ({ book }: Props) => {
 
           <Button
             type="submit"
+            disabled={isPending || isBorrowing || !userEmail}
             className="h-12 w-full rounded-xl bg-primary text-primary-foreground hover:opacity-90"
           >
-            Confirm Borrow
+            {isBorrowing?
+                 "Borrowing..."
+                :"Confirm Borrow"}
           </Button>
         </form>
       </DialogContent>

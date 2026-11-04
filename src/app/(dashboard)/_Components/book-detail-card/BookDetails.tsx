@@ -11,17 +11,19 @@ import {
   UserRound,
 } from "lucide-react";
 
-import { TBook } from "@/lib/dataType";
 import { Badge } from "@/components/ui/badge";
 
 import BookDetailMore from "./BookDetailMore";
 import BookBorrowModal from "./BookBorrowModal";
+import { TBook } from "@/lib/dataType";
+
 
 type BookDetailsProps = {
   book: TBook;
 };
 
 const BookDetails = ({ book }: BookDetailsProps) => {
+
   return (
    <section className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -51,7 +53,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
 
             <div className="relative h-85 w-57.5 overflow-hidden rounded-lg shadow-2xl sm:h-97.5 sm:w-65">
               <Image
-                src={book.Image}
+                src={book ?.Image}
                 alt={book.Title}
                 fill
                 priority
@@ -67,17 +69,17 @@ const BookDetails = ({ book }: BookDetailsProps) => {
             {/* Category & Rating */}
             <div className="flex flex-wrap items-center justify-between gap-3">
               <Badge className="border-0 bg-[#A9B49A]/40 px-4 py-1.5 text-[#49372D] dark:bg-[#A9B49A]/30 dark:text-[#FAF0DF]">
-                {book.Category}
+                {book?.Category}
               </Badge>
 
-              <div className="flex items-center gap-1.5 text-sm">
+               <div className="flex  items-center gap-1.5 text-sm">
                 <Star
                   size={17}
                   className="fill-[#EFCF83] text-[#B88B32]"
                 />
-                <span className="font-semibold">{book.Rating}</span>
-                <span className="text-muted-foreground">/ 5</span>
-              </div>
+                <span className="font-semibold">{book.Rating ?? " "}</span>
+                
+              </div> 
             </div>
 
             {/* Title & Author */}
@@ -101,7 +103,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
               </h2>
 
               <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-                {book.Description}
+                {book?.Description}
               </p>
             </div>
 
@@ -115,7 +117,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 />
                 <p className="text-xs text-muted-foreground">Pages</p>
                 <p className="mt-1 text-sm font-semibold">
-                  {book.Pages}
+                  {book.Pages ?? "Not available"}
                 </p>
               </div>
 
@@ -126,7 +128,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 />
                 <p className="text-xs text-muted-foreground">Published</p>
                 <p className="mt-1 text-sm font-semibold">
-                  {book.PublicationYear}
+                  {book.PublicationYear ?? "Not available"}
                 </p>
               </div>
 
@@ -137,7 +139,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 />
                 <p className="text-xs text-muted-foreground">Language</p>
                 <p className="mt-1 text-sm font-semibold">
-                  {book.Language}
+                  {book.Language ?? "Not available"}
                 </p>
               </div>
 
@@ -152,7 +154,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 </p>
 
                 <p className="mt-1 text-2xl font-bold">
-                  {book.Currency} {book.Price}
+                  {book.Currency ?? "Not available"} {book.Price ?? "Not available"} 
                 </p>
               </div>
               
@@ -174,8 +176,13 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 </p>
 
                 <p className="text-sm font-semibold">
-                  BookNook Admin
+                  {book.userName || "Unknown"}
                 </p>
+
+                <p className="text-xs text-muted-foreground">
+                  {book.userEmail}
+                </p>
+                
               </div>
             </div>
 

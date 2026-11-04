@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 };
 
 const AllBooks = async () => {
+  
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/all-books`);
   const BooksData: TBook[] = await res.json();
 
-  console.log("we get the data.........", BooksData);
 
   return (
     <section className="min-h-screen bg-[#FAF0DF] px-4 py-12 text-[#49372D] dark:bg-[#202820] dark:text-[#FAF0DF]">

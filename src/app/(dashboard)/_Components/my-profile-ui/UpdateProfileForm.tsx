@@ -158,7 +158,7 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
             {/* AVATAR + TEXT */}
             <div className="flex flex-col items-center gap-5 rounded-xl border-2 border-dotted border-[#E8BFA5] bg-white/40 p-5 dark:border-[#69745D] dark:bg-[#30392F]/30 sm:flex-row">
 
-              {/* LEFT: CURRENT AVATAR */}
+              {/* CURRENT AVATAR */}
               <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-[#E8BFA5] bg-[#F0E2D4] dark:border-[#69745D]">
                 {user.image ? (
                   <img
@@ -219,7 +219,7 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
         <div className="flex flex-col-reverse gap-3 border-t border-[#E8BFA5] bg-[#F0E2D4]/40 px-6 py-5 dark:border-[#69745D] dark:bg-[#30392F]/30 sm:flex-row sm:justify-end sm:px-8">
 
           <Link
-            href="/my-profile"
+            href="/"
             className="inline-flex items-center justify-center rounded-xl border border-[#E8BFA5] px-5 py-3 text-sm font-medium text-[#49372D] transition hover:bg-[#F0E2D4] dark:border-[#69745D] dark:text-[#FAF0DF] dark:hover:bg-[#3F4A3A]"
           >
             Cancel

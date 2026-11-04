@@ -15,56 +15,105 @@ import { Input } from "@/components/ui/input";
 
 const AddBooksForm = () => {
   
+  
   const [photoURL, setPhotoURL] = useState("");
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
 
-  const handleAddBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // Uploading file image
+    const uploadImage = async (file: File) => {
+    const formData = new FormData();
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    formData.append("image", file);
 
-    const bookData = Object.fromEntries(formData.entries()) as {
-      name: string;
-      email: string;
-      password: string;
-      image: string;
-      title: string;
-      author: string;
-      category: string;
-      description: string;
-      userName: string;
-      userEmail: string;
-    };
+    const res = await fetch("/api/upload-image", {
+      method: "POST",
+      body: formData,
+    });
 
-    try {
-      setIsSubmitting(true);
+    const data = await res.json();
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/add-books`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookData),
-      });
-
-      const data = await res.json();
-
-      if (data.acknowledged) {
-      }
-
-      toast.success("Book added successfully!");
-
-      form.reset();
-      setPhotoURL("");
-      setPhotoFile(null);
-    } catch (error) {
-      toast.error("Failed to add book!");
-    } finally {
-      setIsSubmitting(false);
+    if (!res.ok) {
+      throw new Error(data.message || "Image upload failed");
     }
+
+    return data.imageUrl;
   };
+
+    
+    // /handle add book/ 
+    const handleAddBook = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      try {
+        setIsSubmitting(true);
+
+        // get the image URL
+        let imageUrl = photoURL.trim();
+
+        // if selected a file, upload it to ImgBB
+        if (photoFile) {
+          imageUrl = await uploadImage(photoFile);
+        }
+
+        //check whether an image was provided
+        if (!imageUrl) {
+          toast.error("Please provide a book image!");
+          return;
+        }
+
+        // book information
+        const bookData = {
+          title: formData.get("title"),
+          author: formData.get("author"),
+          category: formData.get("category"),
+          image: imageUrl,
+          description: formData.get("description"),
+          userName: formData.get("userName"),
+          userEmail: formData.get("userEmail"),
+        };
+
+        // post book information to Express backend
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/add-books`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bookData),
+          }
+        );
+
+        const data = await res.json();
+
+        // check backend response
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to add book");
+        }
+
+        // success message
+        toast.success("Book added successfully!");
+
+        // reset form
+        form.reset();
+        setPhotoURL("");
+        setPhotoFile(null);
+
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          error instanceof Error ? error.message : "Failed to add book!"
+        );
+
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
   return (
     <div className="min-h-screen  px-4 py-10 text-foreground sm:px-6 lg:px-8">

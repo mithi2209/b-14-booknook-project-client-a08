@@ -140,7 +140,7 @@ const BannerSlider = () => {
                       size="lg"
                       className="mt-3 bg-coffee-brown px-7 py-5 text-warm-ivory hover:bg-terracotta hover:text-coffee-brown dark:bg-sunny-yellow dark:text-coffee-brown dark:hover:bg-terracotta lg:py-6"
                     >
-                      <Link href="/books">
+                      <Link href="/all-books">
                         Browse Books
                         <span className="ml-2">→</span>
                       </Link>

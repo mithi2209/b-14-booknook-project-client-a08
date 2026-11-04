@@ -1,3 +1,243 @@
+// "use client";
+
+// import { toast } from "sonner";
+// import { useState } from "react";
+// import { useRouter } from "next/navigation";
+// import { BookOpen, Mail, UserRound } from "lucide-react";
+
+// import { TBook } from "@/lib/dataType";
+// import { Button } from "@/components/ui/button";
+
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+// import { authClient } from "@/lib/auth-client";
+
+// type Props = {
+//   book: TBook;
+//   setCurrentCopies: React.Dispatch<React.SetStateAction<number>>;
+// };
+
+// const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
+  
+//     const router = useRouter();
+//     const [open, setOpen] = useState(false);
+//     const [isBorrowing, setIsBorrowing] = useState(false);
+//     const [isAlreadyBorrowed, setIsAlreadyBorrowed] = useState(false);
+   
+//     const { data: session, isPending } = authClient.useSession();
+//     const userEmail = session?.user?.email;
+    
+//     // checking if already borrow a book
+//       const handleBorrowStats = async () => {
+//         if (!userEmail) return;
+
+//         try{
+//           const res = await fetch(
+//             `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+//           );
+
+//            const borrowedBooks = await res.json();
+
+//             const alreadyBorrowed = Array.isArray(borrowedBooks) &&
+//             borrowedBooks.some((item: { bookId: string }) =>
+//             String(item.bookId) === String(book._id));
+
+//             setIsAlreadyBorrowed(alreadyBorrowed);
+
+//             if (alreadyBorrowed) {
+//             setOpen(false);
+//             toast.warning("You have already borrowed this book!");}
+    
+//         }
+//         catch (error) {
+//           console.error("Borrow status error:", error);
+//         }
+
+//       };
+
+     
+
+
+//     // borrowing book
+//     const handleBorrowBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
+//         e.preventDefault();
+
+//         if (!userEmail) {
+//           toast.error("Please login first!");
+//           return;
+//         }
+
+//         try {
+//           setIsBorrowing(true);
+
+//           const res = await fetch(
+//             `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrow-books`,
+//             {
+//               method: "POST",
+//               headers: {
+//                 "Content-Type": "application/json",
+//               },
+//               body: JSON.stringify({
+//                 bookId: book._id,
+//                 userEmail: userEmail,
+//               }),
+//             }
+//           );
+
+//           const data = await res.json();
+
+//           //  borrowing even if the server returns a 200 status
+//           if (!res.ok ||
+//             data.message?.toLowerCase().includes("already borrowed")) {
+//             if (data.message?.toLowerCase().includes("already borrowed")) {
+//               setIsAlreadyBorrowed(true);
+//               setOpen(false);
+//             }
+
+//             toast.error(data.message || "Something went wrong!");
+//             return;
+//           }
+
+//           // Updating button immediately after successful borrowing
+//           setIsAlreadyBorrowed(true);
+
+//           setCurrentCopies((prev) => prev - 1);  
+
+//           toast.success(data.message || "Book borrowed successfully!");
+
+//           setOpen(false);
+
+//           router.refresh();
+//         } 
+
+//         catch (error) {
+//           toast.error("Something went wrong. Please try again.");
+//         } 
+//         finally {
+//           setIsBorrowing(false);
+//         }
+//       };
+
+
+
+//   return (
+
+//     <Dialog open={open}
+//       onOpenChange={(isOpen) => {
+//         setOpen(isOpen);
+
+//         if (isOpen) {
+//           handleBorrowStats();
+//         }
+//       }}>
+
+//       <DialogTrigger
+        
+//         disabled={isAlreadyBorrowed || book.TotalCopies <= 0}
+        
+
+//         className="group flex h-11 w-full items-center rounded-lg border border-[#85896B] px-4  shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A]dark:text-[#30392F]dark:hover:bg-[#BCC6AC] bg-[#85896B]  text-[#FAF0DF]
+
+//           disabled:border-[#A3A58F] disabled:bg-[#E5E5DC]
+//           disabled:text-[#77796B] 
+//           disabled:hover:bg-[#E5E5DC]  dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC] dark:disabled:border-[#596452] dark:disabled:bg-[#394336] dark:disabled:text-[#B8C1AE]">
+
+//         <BookOpen
+//           size={18}
+//           className="mr-2 transition-transform duration-300 group-hover:-rotate-6"
+//         />
+//         {book.TotalCopies <= 0
+//           ? "Not Available"
+//           : isAlreadyBorrowed
+//           ? "Already Borrowed"
+//           : "Borrow This Book"}
+
+//         <span className="ml-auto text-lg transition-transform duration-300 group-hover:translate-x-1">
+//           →
+//         </span>
+//       </DialogTrigger>
+
+//       <DialogContent className="w-[calc(100%-2rem)] rounded-2xl border-border bg-card sm:max-w-md">
+//         <DialogHeader>
+//           <DialogTitle className="text-xl font-bold">
+//             Borrow This Book
+//           </DialogTitle>
+
+//           <DialogDescription>
+//             Confirm your borrowing request for{" "}
+//             <span className="font-semibold text-foreground">{book.Title}</span>.
+//           </DialogDescription>
+//         </DialogHeader>
+
+//         <form onSubmit={handleBorrowBook} className="space-y-5 pt-3">
+//           <div className="space-y-2">
+//             <label className="text-sm font-medium">User Name</label>
+
+//             <div className="relative">
+//               <UserRound
+//                 size={17}
+//                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+//               />
+
+//               <input
+//                 type="text"
+//                 value={session?.user?.name || ""}
+//                 readOnly
+//                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
+//               />
+//             </div>
+//           </div>
+
+//           <div className="space-y-2">
+//             <label className="text-sm font-medium">Email Address</label>
+
+//             <div className="relative">
+//               <Mail
+//                 size={17}
+//                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+//               />
+
+//               <input
+//                 type="email"
+//                 value={userEmail || ""}
+//                 readOnly
+//                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
+//               />
+//             </div>
+//           </div>
+
+//           <Button
+//             type="submit"
+//             disabled={isPending || isBorrowing || !userEmail}
+//             className="h-12 w-full rounded-xl bg-primary text-primary-foreground hover:opacity-90"
+//           >
+//             {isBorrowing?
+//                  "Borrowing..."
+//                 :"Confirm Borrow"}
+//           </Button>
+//         </form>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
+
+// export default BookBorrowModal;
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { toast } from "sonner";
@@ -16,162 +256,313 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { authClient } from "@/lib/auth-client";
 
 type Props = {
   book: TBook;
+  setCurrentCopies: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const BookBorrowModal = ({ book }: Props) => {
-  
-    const router = useRouter();
-    const [open, setOpen] = useState(false);
-    const [isBorrowing, setIsBorrowing] = useState(false);
-    const [isAlreadyBorrowed, setIsAlreadyBorrowed] = useState(false);
-   
-    const { data: session, isPending } = authClient.useSession();
-    const userEmail = session?.user?.email;
+const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
+
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [isBorrowing, setIsBorrowing] = useState(false);
+  const [isAlreadyBorrowed, setIsAlreadyBorrowed] = useState(false);
+
+  const { data: session, isPending } = authClient.useSession();
+  const userEmail = session?.user?.email;
+
+
+  // Checking if the current user already borrowed this book
+  const handleBorrowStats = async () => {
+    if (!userEmail) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to check borrowing status");
+      }
+
+      const borrowedBooks = await res.json();
+
+      const alreadyBorrowed =
+        Array.isArray(borrowedBooks) &&
+        borrowedBooks.some((item: { bookId: string }) =>
+          String(item.bookId) === String(book._id)
+        );
+
+      setIsAlreadyBorrowed(alreadyBorrowed);
+
+    } catch (error) {
+      console.error("Borrow status error:", error);
+    }
+  };
+
+
+  // Handling button click
+  const handleBorrowClick = async () => {
+  if (isPending || isBorrowing) return;
+
     
-    // checking if already borrow a book
-      const handleBorrowStats = async () => {
-        if (!userEmail) return;
+    if (!userEmail) {
+      toast.error("Please login first!");
+      return;
+    }
 
-        try{
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
-          );
-
-           const borrowedBooks = await res.json();
-
-            const alreadyBorrowed = Array.isArray(borrowedBooks) &&
-            borrowedBooks.some((item: { bookId: string }) =>
-            String(item.bookId) === String(book._id));
-
-            setIsAlreadyBorrowed(alreadyBorrowed);
-
-            if (alreadyBorrowed) {
-            setOpen(false);
-            toast.warning("You have already borrowed this book!");}
     
+    if (isAlreadyBorrowed) {
+      toast.warning("You have already borrowed this book!");
+      return;
+    }
+
+    // No available copies
+    if (Number(book.TotalCopies) <= 0) {
+      toast.error("This book is currently not available!");
+      return;
+    }
+
+  try {
+    
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to check borrowing status");
+    }
+
+    const borrowedBooks = await res.json();
+
+    const alreadyBorrowed = Array.isArray(borrowedBooks) &&
+      borrowedBooks.some(
+        (item: { bookId: string }) =>
+          String(item.bookId) === String(book._id)
+      );
+
+    if (alreadyBorrowed) {
+      setIsAlreadyBorrowed(true);
+      toast.warning("You have already borrowed this book!");
+      return; // not to open modal
+    }
+
+    // Only open modal if borrowing is allowed
+    setOpen(true);
+
+    } catch (error) {
+      console.error("Borrow status error:", error);
+      toast.error("Could not check borrowing status. Please try again.");
+    }
+  };
+
+
+  // Borrowing book
+  const handleBorrowBook = async (
+    e: React.SubmitEvent<HTMLFormElement>
+  ) => {
+
+    e.preventDefault();
+
+    if (!userEmail) {
+      toast.error("Please login first!");
+      return;
+    }
+
+    try {
+      setIsBorrowing(true);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrow-books`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            bookId: book._id,
+            userEmail: userEmail,
+          }),
         }
-        catch (error) {
-          console.error("Borrow status error:", error);
-        }
+      );
 
-      };
+      const data = await res.json();
 
-     
+      // Handling unsuccessful borrowing
+      if (
+        !res.ok ||
+        data.message?.toLowerCase().includes("already borrowed")
+      ) {
 
-
-    // borrowing book
-    const handleBorrowBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!userEmail) {
-          toast.error("Please login first!");
-          return;
-        }
-
-        try {
-          setIsBorrowing(true);
-
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrow-books`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                bookId: book._id,
-                userEmail: userEmail,
-              }),
-            }
-          );
-
-          const data = await res.json();
-
-          //  borrowing even if the server returns a 200 status
-          if (!res.ok ||
-            data.message?.toLowerCase().includes("already borrowed")) {
-            if (data.message?.toLowerCase().includes("already borrowed")) {
-              setIsAlreadyBorrowed(true);
-              setOpen(false);
-            }
-
-            toast.error(data.message || "Something went wrong!");
-            return;
-          }
-
-          // Update button immediately after successful borrowing
+        if (data.message?.toLowerCase().includes("already borrowed")) {
           setIsAlreadyBorrowed(true);
-
-          toast.success(data.message || "Book borrowed successfully!");
           setOpen(false);
-          router.push("/my-borrowed-books");
-        } 
-        catch (error) {
-          toast.error("Something went wrong. Please try again.");
-        } finally {
-          setIsBorrowing(false);
         }
-      };
 
+        toast.error(data.message || "Something went wrong!");
+        return;
+      }
+
+
+      // Updating button and copies after successful borrowing
+
+      setIsAlreadyBorrowed(true);
+
+      setCurrentCopies((prev) => Math.max(prev - 1, 0));
+
+      toast.success("Book borrowed successfully! Please return it within 7 days.");
+
+      //  modal close
+      setOpen(false);
+
+      // Refreshing server data
+      router.refresh();
+
+    } 
+    catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } 
+    finally {
+      setIsBorrowing(false);
+    }
+  };
 
 
   return (
 
-    <Dialog open={open}
-      onOpenChange={(isOpen) => {
-        setOpen(isOpen);
+    <Dialog open={open} onOpenChange={setOpen}>
 
-        if (isOpen) {
-          handleBorrowStats();
-        }
-      }}>
+      {/* Borrow Button */}
+      {/* <DialogTrigger
+        onClick={(e) => {
+          e.preventDefault();
+          handleBorrowClick();
+        }}
+        disabled={isBorrowing || isPending}
 
-      <DialogTrigger
-        
-        disabled={isAlreadyBorrowed}
-        
+        className={`group flex h-11 w-full items-center rounded-lg border px-4 shadow-sm transition-all duration-300
 
-        className="group flex h-9 w-full items-center rounded-lg border border-[#85896B] px-3  shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A]dark:text-[#30392F]dark:hover:bg-[#BCC6AC] bg-[#85896B]  text-[#FAF0DF]
+          ${
+            isAlreadyBorrowed
+              ? "cursor-pointer border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
 
-        disabled:border-[#A3A58F] disabled:bg-[#E5E5DC]
-         disabled:text-[#77796B] 
-          disabled:hover:bg-[#E5E5DC]  dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC] dark:disabled:border-[#596452] dark:disabled:bg-[#394336] dark:disabled:text-[#B8C1AE]">
+              : book.TotalCopies <= 0
+              ? "cursor-pointer border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900 dark:bg-red-950 dark:text-red-300 dark:hover:bg-red-900"
+
+              : "border-[#85896B] bg-[#85896B] text-[#FAF0DF] hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC]"
+          }
+        `}
+      >
 
         <BookOpen
           size={18}
           className="mr-2 transition-transform duration-300 group-hover:-rotate-6"
         />
-         { isAlreadyBorrowed
-            ? "Already Borrowed " 
-            : "Borrow This Book"
-          }
+
+        {book.TotalCopies <= 0
+          ? "Not Available"
+          : isAlreadyBorrowed
+          ? "Already Borrowed"
+          : "Borrow This Book"}
 
         <span className="ml-auto text-lg transition-transform duration-300 group-hover:translate-x-1">
           →
         </span>
-      </DialogTrigger>
 
+      </DialogTrigger> */}
+{/* 
+      <DialogTrigger
+  onClick={(e) => {
+    e.preventDefault();
+    handleBorrowClick();
+  }}
+  disabled={isBorrowing || isPending}
+  className={`group flex h-11 w-full items-center rounded-lg border px-4 shadow-sm transition-all duration-300
+
+    ${
+      isAlreadyBorrowed
+        ? "cursor-pointer border-[#85896B]/40 bg-[#A9B49A]/20 text-[#85896B]/70 opacity-70 hover:bg-[#A9B49A]/30 dark:border-[#A9B49A]/30 dark:bg-[#A9B49A]/10 dark:text-[#A9B49A]/60"
+
+        : book.TotalCopies <= 0
+        ? "cursor-pointer border-[#C58B75]/40 bg-[#E8BFA5]/20 text-[#A56E58]/70 opacity-75 hover:bg-[#E8BFA5]/30 dark:border-[#C58B75]/30 dark:bg-[#49372D]/40 dark:text-[#E8BFA5]/70"
+
+        : "border-[#85896B] bg-[#85896B] text-[#FAF0DF] hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC]"
+    }
+  `}
+>
+  <BookOpen
+    size={18}
+    className="mr-2 transition-transform duration-300 group-hover:-rotate-6"
+  />
+
+  {book.TotalCopies <= 0
+    ? "Not Available"
+    : isAlreadyBorrowed
+    ? "Already Borrowed"
+    : "Borrow This Book"}
+
+  <span className="ml-auto text-lg transition-transform duration-300 group-hover:translate-x-1">
+    →
+  </span>
+</DialogTrigger> */}
+<button
+  type="button"
+  onClick={handleBorrowClick}
+  disabled={isPending || isBorrowing}
+  className={`group flex h-11 w-full items-center rounded-lg border px-4 shadow-sm transition-all duration-300 ${
+    isAlreadyBorrowed
+      ? "cursor-pointer border-[#85896B]/40 bg-[#A9B49A]/20 text-[#66704F]/70 opacity-70 hover:bg-[#A9B49A]/30 dark:border-[#A9B49A]/30 dark:bg-[#A9B49A]/10 dark:text-[#A9B49A]/60 dark:hover:bg-[#A9B49A]/20"
+      : book.TotalCopies <= 0
+      ? "cursor-pointer border-[#C58B75]/40 bg-[#E8BFA5]/20 text-[#A56E58]/70 opacity-75 hover:bg-[#E8BFA5]/30 dark:border-[#C58B75]/30 dark:bg-[#49372D]/40 dark:text-[#E8BFA5]/70"
+      : "border-[#85896B] bg-[#85896B] text-[#FAF0DF] hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC]"
+  }`}
+>
+  <BookOpen size={18} className="mr-2" />
+
+  {book.TotalCopies <= 0
+    ? "Not Available"
+    : isAlreadyBorrowed
+    ? "Already Borrowed"
+    : "Borrow This Book"}
+
+  <span className="ml-auto text-lg">→</span>
+</button>
+
+
+      {/* Borrow Confirmation Modal */}
       <DialogContent className="w-[calc(100%-2rem)] rounded-2xl border-border bg-card sm:max-w-md">
+
         <DialogHeader>
+
           <DialogTitle className="text-xl font-bold">
             Borrow This Book
           </DialogTitle>
 
           <DialogDescription>
             Confirm your borrowing request for{" "}
-            <span className="font-semibold text-foreground">{book.Title}</span>.
+            <span className="font-semibold text-foreground">
+              {book.Title}
+            </span>.
           </DialogDescription>
+
         </DialogHeader>
 
+
         <form onSubmit={handleBorrowBook} className="space-y-5 pt-3">
+
+          {/* User Name */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">User Name</label>
+
+            <label className="text-sm font-medium">
+              User Name
+            </label>
 
             <div className="relative">
+
               <UserRound
                 size={17}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -183,13 +574,20 @@ const BookBorrowModal = ({ book }: Props) => {
                 readOnly
                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
               />
+
             </div>
           </div>
 
+
+          {/* Email Address */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Email Address</label>
+
+            <label className="text-sm font-medium">
+              Email Address
+            </label>
 
             <div className="relative">
+
               <Mail
                 size={17}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -201,20 +599,28 @@ const BookBorrowModal = ({ book }: Props) => {
                 readOnly
                 className="h-11 w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 text-sm outline-none"
               />
+
             </div>
           </div>
 
+
+          {/* Confirm Borrow Button */}
           <Button
             type="submit"
             disabled={isPending || isBorrowing || !userEmail}
             className="h-12 w-full rounded-xl bg-primary text-primary-foreground hover:opacity-90"
           >
-            {isBorrowing?
-                 "Borrowing..."
-                :"Confirm Borrow"}
+
+            {isBorrowing
+              ? "Borrowing..."
+              : "Confirm Borrow"}
+
           </Button>
+
         </form>
+
       </DialogContent>
+
     </Dialog>
   );
 };

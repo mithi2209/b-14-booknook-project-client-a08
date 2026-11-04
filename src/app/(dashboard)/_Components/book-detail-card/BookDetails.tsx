@@ -1,22 +1,18 @@
+
+
+
+
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   BookOpen,
-  CalendarDays,
-  Globe,
-  Star,
   UserRound,
 } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
-
-import BookDetailMore from "./BookDetailMore";
-import BookBorrowModal from "./BookBorrowModal";
 import { TBook } from "@/lib/dataType";
-import { authClient } from "@/lib/auth-client";
+import BookBorrowModal from "./BookBorrowModal";
+import { useState } from "react";
 
 
 type BookDetailsProps = {
@@ -24,177 +20,152 @@ type BookDetailsProps = {
 };
 
 const BookDetails = ({ book }: BookDetailsProps) => {
+  const router = useRouter();
 
-      const { data: session, isPending } = authClient.useSession();
+  // TotalCopies when borrowing or returning.
+ 
+  const [currentCopies, setCurrentCopies] = useState(
+    Number(book.TotalCopies) || 0
+  );
 
-      const userEmail = session?.user?.email;
-      const userName = session?.user?.name;
+  const copiesLeft = Math.max(currentCopies, 0);
 
   return (
 
-   <section className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
+    <section className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 sm:py-12 lg:px-8">
       <div className="mx-auto max-w-6xl">
 
-        {/* Back Navigation */}
-        <Link
-          href="/all-books"
-          className="mb-7 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          className="mb-8 flex items-center gap-2 text-sm font-medium text-muted-foreground transition hover:text-[#85896B]"
         >
-          <ArrowLeft size={17} />
-          Back to Collection
-        </Link>
+          <ArrowLeft size={18} />
+          Back to Books
+        </button>
 
-        {/* Main Book Section */}
-        <div className="grid items-stretch gap-5 lg:grid-cols-[320px_1fr]">
+        {/* Main Book Details Card */}
+        <div className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-lg md:grid-cols-2">
 
-          {/* Left: Book Cover */}
-          <div className="relative flex min-h-105 items-center justify-center overflow-hidden rounded-2xl bg-[#E8DFC9] p-8 dark:bg-[#46513F] sm:min-h-120 lg:min-h-full">
+          {/* Book Image Section */}
+          <div className="relative flex items-center justify-center bg-[#FAF0DF] p-8 dark:bg-[#292820] sm:p-12">
 
-            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#85896B]/25" />
-
-            <div className="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-[#E8BFA5]/30" />
-
-            <div className="absolute left-5 top-5 rounded-full bg-white/60 px-3 py-1 text-xs font-semibold text-[#49372D] backdrop-blur-sm">
-              BookNook Collection
+            <div className="absolute left-5 top-5 rounded-full bg-[#85896B]/15 px-4 py-2 text-xs font-semibold text-[#73775B] dark:text-[#D1DDBB]">
+              {book.Category}
             </div>
 
-            <div className="relative h-85 w-57.5 overflow-hidden rounded-lg shadow-2xl sm:h-97.5 sm:w-65">
-              <Image
-                src={book ?.Image}
+            <div className="flex h-87.5 w-full items-center justify-center sm:h-120">
+              <img
+                src={book.Image}
                 alt={book.Title}
-                fill
-                priority
-                sizes="(max-width: 640px) 230px, 260px"
-                className="object-cover"
+                className="h-full max-w-full rounded-xl object-contain shadow-xl transition duration-500 hover:scale-[1.03]"
               />
             </div>
           </div>
 
-          {/* Right: Book Information */}
-          <div className="flex flex-col rounded-2xl border border-border bg-card p-5 sm:p-8 lg:p-9">
+          {/* Book Information Section */}
+          <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
 
-            {/* Category & Rating */}
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <Badge className="border-0 bg-[#A9B49A]/40 px-4 py-1.5 text-[#49372D] dark:bg-[#A9B49A]/30 dark:text-[#FAF0DF]">
-                {book?.Category}
-              </Badge>
+            {/* Category */}
+            <span className="mb-5 w-fit rounded-full bg-[#85896B]/15 px-4 py-2 text-sm font-semibold text-[#73775B] dark:text-[#C5CCAE]">
+              {book.Category}
+            </span>
 
-               <div className="flex  items-center gap-1.5 text-sm">
-                <Star
-                  size={17}
-                  className="fill-[#EFCF83] text-[#B88B32]"
-                />
-                <span className="font-semibold">{book.Rating ?? " "}</span>
-                
-              </div> 
-            </div>
+            {/* Title */}
+            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+              {book.Title}
+            </h1>
 
-            {/* Title & Author */}
-            <div className="mt-6">
-              <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-[42px]">
-                {book.Title}
-              </h1>
+            {/* Author */}
+            <p className="mt-3 text-base text-muted-foreground">
+              Written by{" "}
+              <span className="font-semibold text-foreground">
+                {book.Author}
+              </span>
+            </p>
 
-              <p className="mt-3 text-base text-muted-foreground">
-                Written by{" "}
-                <span className="font-semibold text-foreground">
-                  {book.Author}
-                </span>
-              </p>
+            {/* Copies Left */}
+            <div className="mt-7 flex items-center justify-between rounded-2xl border border-[#85896B]/30 bg-[#85896B]/10 p-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-[#85896B]/20 p-3 text-[#85896B]">
+                  <BookOpen size={22} />
+                </div>
+
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    Copies Left
+                  </p>
+
+                  <p className="text-xl font-bold text-foreground">
+                    {copiesLeft}
+                    <span className="ml-1 text-sm font-normal text-muted-foreground">
+                      {copiesLeft === 1 ? "copy" : "copies"}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <span
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                  copiesLeft > 0
+                    ? "bg-[#85896B]/20 text-[#66704F] dark:text-[#D1DDBB]"
+                    : "bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-300"
+                }`}
+              >
+                {copiesLeft > 0 ? "Available" : "Out of Stock"}
+              </span>
             </div>
 
             {/* Description */}
-            <div className="mt-7">
-              <h2 className="mb-2 text-base font-semibold">
+            <div className="mt-8">
+              <h2 className="mb-3 text-lg font-bold text-foreground">
                 About This Book
               </h2>
 
-              <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-                {book?.Description}
+              <p className="whitespace-pre-line text-sm leading-7 text-muted-foreground sm:text-base">
+                {book.Description}
               </p>
             </div>
 
-            {/* Quick Information */}
-            <div className="mt-7 grid grid-cols-3 gap-3 border-y border-border py-5">
-
-              <div>
-                <BookOpen
-                  size={19}
-                  className="mb-2 text-[#85896B] dark:text-[#EFCF83]"
-                />
-                <p className="text-xs text-muted-foreground">Pages</p>
-                <p className="mt-1 text-sm font-semibold">
-                  {book.Pages ?? "Not available"}
-                </p>
-              </div>
-
-              <div>
-                <CalendarDays
-                  size={19}
-                  className="mb-2 text-[#85896B] dark:text-[#EFCF83]"
-                />
-                <p className="text-xs text-muted-foreground">Published</p>
-                <p className="mt-1 text-sm font-semibold">
-                  {book.PublicationYear ?? "Not available"}
-                </p>
-              </div>
-
-              <div>
-                <Globe
-                  size={19}
-                  className="mb-2 text-[#85896B] dark:text-[#EFCF83]"
-                />
-                <p className="text-xs text-muted-foreground">Language</p>
-                <p className="mt-1 text-sm font-semibold">
-                  {book.Language ?? "Not available"}
-                </p>
-              </div>
-
-            </div>
-
-            {/* Price & Borrow */}
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
-              <div>
-                <p className="text-xs text-muted-foreground">
-                  Book Price
-                </p>
-
-                <p className="mt-1 text-2xl font-bold">
-                  {book.Currency ?? "Not available"} {book.Price ?? "Not available"} 
-                </p>
-              </div>
-              
-              <div className="w-full sm:w-56">
-                <BookBorrowModal book={book} />
-              </div>
-
-            </div>
-
             {/* Added By */}
-            <div className="mt-auto flex items-center gap-3 border-t border-border pt-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#A9B49A]/30 text-[#49372D] dark:text-[#FAF0DF]">
-                <UserRound size={19} />
+            <div className="mt-7 flex items-center gap-3 border-t border-border pt-6">
+              <div className="rounded-full bg-[#85896B]/15 p-3 text-[#85896B]">
+                <UserRound size={21} />
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground">
-                  Added to BookNook by
+                <p className="text-sm text-muted-foreground">
+                  Added By
                 </p>
 
-                <p className="text-sm font-semibold">
-                  {book?.userName || "Unknown"}
+                <p className="font-semibold text-foreground">
+                  {book.userName || "BookNook Member"}
                 </p>
-
+                
+                <p className="text-sm text-muted-foreground">
+                  {book.userEmail || "BookNook Member"}
+                </p>
               </div>
+            </div>
+
+            {/* Borrow Button */}
+            <div className="mt-8">
+              {copiesLeft > 0 ? (
+                <BookBorrowModal
+                  book={{ ...book, TotalCopies: currentCopies }}
+                  setCurrentCopies={setCurrentCopies} />
+                ) : (
+                <button
+                  disabled
+                  className="w-full cursor-not-allowed rounded-full bg-muted px-6 py-3.5 font-semibold text-muted-foreground"
+                >
+                  Currently Unavailable
+                </button>
+              )}
             </div>
 
           </div>
         </div>
-
-        {/* Additional Book Details */}
-        <BookDetailMore book={book} />
-
       </div>
     </section>
   );

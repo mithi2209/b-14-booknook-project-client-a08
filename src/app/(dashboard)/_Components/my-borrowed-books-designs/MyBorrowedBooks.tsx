@@ -1,71 +1,74 @@
 
-
 "use client";
 
+import Loading from "@/app/loading";
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import Loading from "@/app/loading";
-import BorrowedBooksHeader from "./BorrowedBooksHeader";
+import type { TBorrowedBook } from "@/lib/dataType";
 import BorrowedBooksCard from "./BorrowedBooksCard";
-
-
+import EmptyBorrowedBooks from "./EmptyBorrowedBooks";
+import BorrowedBooksHeader from "./BorrowedBooksHeader";
 
 const MyBorrowedBooks = () => {
+  const { data: session, isPending } = authClient.useSession();
 
-        const { data: session, isPending } = authClient.useSession();
+  const userEmail = session?.user?.email;
 
-        const userEmail = session?.user?.email;
-    
-        const [borrowedBooks, setBorrowedBooks] = useState([]);
+  const [borrowedBooks, setBorrowedBooks] = useState<TBorrowedBook[]>([]);
+  const [loading, setLoading] = useState(true);
 
-         const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (isPending) return;
 
-        // const getBorrowedBooks = async () => {
-        //     if (!userEmail) return;
+    if (!userEmail) {
+      setBorrowedBooks([]);
+      setLoading(false);
+      return;
+    }
 
-        //     const response = await fetch(
-        //     `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
-        //     );
+    const getBorrowedBooks = async () => {
+      try {
+        setLoading(true);
 
-        //     const data = await response.json();
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+        );
 
-        //     setBorrowedBooks(data);
-        // };
-
-        useEffect(() => {
-
-            if(!userEmail) return;
-
-            const getBorrowedBooks = async () =>{
-
-                const res = await fetch (`${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`);
-
-                const data = await res.json() ;
-
-                setBorrowedBooks(data);
-                setLoading(false);
-            }
-
-            getBorrowedBooks()
-
-        },[userEmail])
-
-        if(isPending){
-            return <Loading/>
+        if (!res.ok) {
+          throw new Error("Failed to fetch borrowed books");
         }
 
-    return (
-        <div className="space-y-7">
+        const data = await res.json();
 
-            <BorrowedBooksHeader/>
+        setBorrowedBooks(data);
+      } catch (error) {
+        console.error("Get borrowed books error:", error);
+        setBorrowedBooks([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-            <BorrowedBooksCard
-               books={borrowedBooks}
-               loading={loading}
-            />
-        </div>
-    );
+    getBorrowedBooks();
+  }, [userEmail, isPending]);
+  
+
+  if (isPending || loading) {
+    return <Loading />;
+  }
+
+  return (
+    <div className="space-y-7">
+      <BorrowedBooksHeader />
+
+      {borrowedBooks.length === 0 ? (
+        <EmptyBorrowedBooks />
+      ) : (
+        <BorrowedBooksCard books={borrowedBooks} />
+      )}
+    </div>
+  );
 };
 
 export default MyBorrowedBooks;

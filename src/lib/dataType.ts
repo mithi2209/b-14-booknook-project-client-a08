@@ -9,18 +9,7 @@ export type TBook = {
   Description: string;
   userName: string;
   userEmail: string;
-
-  // Optional additional information
-  Publisher?: string;
-  ISBN?: string;
-  Tags?: string[];
-  Rating?: number;
-  Pages?: number;
-  PublicationYear?: number;
-  Language?: string;
-  Price?: number;
-  Currency?: string;
-
+  TotalCopies: number;
   createdAt?: string;
 };
 
@@ -40,7 +29,8 @@ export type TBorrowedBook = {
   bookImage: string;
   userEmail: string;
   borrowDate: string;
-  returnDate: string;
+  expectedReturnDate: string;
+  actualReturnDate: string | null;
   status: "borrowed" | "returned";
 };
 

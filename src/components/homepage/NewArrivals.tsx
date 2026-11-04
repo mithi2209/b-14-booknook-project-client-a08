@@ -17,7 +17,7 @@ const NewArrivals = async () => {
     <section className=" py-16 bg-warm-ivory dark:bg-[#30392F] transition-colors duration-300 md:py-20">
       <div className="mx-auto container px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <p className="mmb-2 text-xs font-semibold tracking-[0.2em] text-deep-olive dark:text-sunny-yellow ">
+          <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-deep-olive dark:text-sunny-yellow ">
             New Added Books
           </p>
 

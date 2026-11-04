@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 
-import { FaFacebook } from "react-icons/fa";
-import { GrInstagram } from "react-icons/gr";
+
+
 import { FaGithub } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { GrInstagram } from "react-icons/gr";
 import footerLight from "@/assets/images/footer-image-1.jpg";
 import footerDark from "@/assets/images/footer-img-dark-.jpg";
 import { LibraryBig, Mail, Phone, MapPin } from "lucide-react";
@@ -154,7 +157,19 @@ const Footer = () => {
                 aria-label="GitHub"
                 className="flex h-10 w-10 items-center justify-center rounded-full  transition bg-[#85896B] text-white"
               >
+          
                 <FaGithub size={19} />
+              </a>
+
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="flex h-10 w-10 items-center justify-center rounded-full  transition bg-[#85896B] text-white"
+              >
+          
+                <FaXTwitter size={19} />
               </a>
             </div>
           </div>

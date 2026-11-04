@@ -70,6 +70,7 @@ const AddBooksForm = () => {
           title: formData.get("title"),
           author: formData.get("author"),
           category: formData.get("category"),
+          totalCopies: Number(formData.get("totalCopies")), 
           image: imageUrl,
           description: formData.get("description"),
           userName: formData.get("userName"),
@@ -231,6 +232,28 @@ const AddBooksForm = () => {
                   <option value="Others">Others</option>
                 </select>
               </div>
+            </div>
+
+            {/* Total Copies */}
+            <div className="space-y-2">
+              <label htmlFor="totalCopies" className="text-sm font-medium">
+                Total Copies <span className="text-destructive">*</span>
+              </label>
+
+              <input
+                id="totalCopies"
+                name="totalCopies"
+                type="number"
+                min="1"
+                defaultValue="1"
+                required
+                placeholder="Enter total copies"
+                className="h-11 w-full rounded-lg border border-input
+                bg-background px-3 text-sm text-foreground
+                placeholder:text-muted-foreground
+                outline-none transition
+                focus-visible:ring-2 focus-visible:ring-ring"
+              />
             </div>
 
             {/* Book Image */}

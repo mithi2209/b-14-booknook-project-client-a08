@@ -99,7 +99,7 @@ const BannerSlider = () => {
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
-              <div className="relative grid min-h-130 grid-cols-1 items-center gap-8 overflow-hidden bg-hero px-6 py-12 text-warm-ivory sm:px-10 md:grid-cols-2 md:px-12 lg:px-16">
+              <div className="relative grid min-h-130 grid-cols-1 items-center gap-8 overflow-hidden bg-hero px-6 py-12 text-warm-ivory sm:px-10 md:grid-cols-2 md:px-12 lg:px-20">
 
                 {/* Left Side - Text Content */}
                 <motion.div

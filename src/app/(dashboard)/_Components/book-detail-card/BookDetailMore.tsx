@@ -8,7 +8,10 @@ type Props = {
 };
 
 const BookDetailMainContent = ({ book }: Props) => {
+
+
   return (
+
      <div className="mt-5 rounded-2xl border border-border bg-card p-6 sm:p-8">
 
       <h2 className="mb-6 text-xl font-bold">

@@ -11,6 +11,7 @@ import { BookOpen,
 
 import formatDate from "@/lib/formateDate";
 import { TBorrowedBook } from "@/lib/dataType";
+import Link from "next/link";
 
 
 
@@ -24,7 +25,7 @@ type BorrowedBooksProps = {
 const BorrowedBooksCard = ({books,loading,}: BorrowedBooksProps)  => {
 
     return (
-          <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       {/* Section heading */}
       <div className="flex flex-col gap-4 border-b border-border p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div>
@@ -37,20 +38,15 @@ const BorrowedBooksCard = ({books,loading,}: BorrowedBooksProps)  => {
         </div>
 
         <button
-          disabled={loading}
+         
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? (
-            <>
-              <LoaderCircle size={17} className="animate-spin" />
-              Loading...
-            </>
-          ) : (
+   
             <>
               <BookOpen size={17} />
-              Load My Borrowed Books
+              <Link href="/all-books">Browse Books To Borrow</Link>
             </>
-          )}
+         
         </button>
       </div>
 

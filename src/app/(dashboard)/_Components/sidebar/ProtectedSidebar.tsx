@@ -29,7 +29,7 @@ const menuItems = [
     icon: BookPlus,
   },
   {
-    title: " Borrowed Book",
+    title: "My Borrowed ",
     href: "/my-borrowed-books",
     icon: ClipboardList,
   },

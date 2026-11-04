@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import BookDetailMore from "./BookDetailMore";
 import BookBorrowModal from "./BookBorrowModal";
 import { TBook } from "@/lib/dataType";
+import { authClient } from "@/lib/auth-client";
 
 
 type BookDetailsProps = {
@@ -24,7 +25,13 @@ type BookDetailsProps = {
 
 const BookDetails = ({ book }: BookDetailsProps) => {
 
+      const { data: session, isPending } = authClient.useSession();
+
+      const userEmail = session?.user?.email;
+      const userName = session?.user?.name;
+
   return (
+
    <section className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
 
@@ -176,13 +183,9 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 </p>
 
                 <p className="text-sm font-semibold">
-                  {book.userName || "Unknown"}
+                  {book?.userName || "Unknown"}
                 </p>
 
-                <p className="text-xs text-muted-foreground">
-                  {book.userEmail}
-                </p>
-                
               </div>
             </div>
 

@@ -10,6 +10,7 @@ export type TBook = {
   userName: string;
   userEmail: string;
   TotalCopies: number;
+  AvailableCopies: number;
   createdAt?: string;
 };
 

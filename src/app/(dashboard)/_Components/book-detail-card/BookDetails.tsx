@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { TBook } from "@/lib/dataType";
 import BookBorrowModal from "./BookBorrowModal";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 
 
 type BookDetailsProps = {
@@ -20,13 +20,17 @@ type BookDetailsProps = {
 };
 
 const BookDetails = ({ book }: BookDetailsProps) => {
+
   const router = useRouter();
 
-  // TotalCopies when borrowing or returning.
- 
-  const [currentCopies, setCurrentCopies] = useState(
-    Number(book.TotalCopies) || 0
-  );
+    // TotalCopies when borrowing or returning
+    const [currentCopies, setCurrentCopies] = useState(
+      Number(book.AvailableCopies) || 0
+    );
+
+    useEffect(() => {
+      setCurrentCopies(Number(book.AvailableCopies) || 0);
+    }, [book.AvailableCopies]);
 
   const copiesLeft = Math.max(currentCopies, 0);
 
@@ -139,11 +143,11 @@ const BookDetails = ({ book }: BookDetailsProps) => {
                 </p>
 
                 <p className="font-semibold text-foreground">
-                  {book.userName || "BookNook Member"}
+                  {book?.userName || "BookNook Member"}
                 </p>
                 
                 <p className="text-sm text-muted-foreground">
-                  {book.userEmail || "BookNook Member"}
+                  {book?.userEmail || "BookNook Member"}
                 </p>
               </div>
             </div>
@@ -152,8 +156,8 @@ const BookDetails = ({ book }: BookDetailsProps) => {
             <div className="mt-8">
               {copiesLeft > 0 ? (
                 <BookBorrowModal
-                  book={{ ...book, TotalCopies: currentCopies }}
-                  setCurrentCopies={setCurrentCopies} />
+                    book={{ ...book, AvailableCopies: currentCopies }}
+                    setCurrentCopies={setCurrentCopies} />
                 ) : (
                 <button
                   disabled

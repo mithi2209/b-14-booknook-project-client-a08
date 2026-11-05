@@ -5,7 +5,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
@@ -32,54 +32,57 @@ const BorrowedBooksCard = ({ books }: BorrowedBooksProps) => {
 
     const [isReturning, setIsReturning] = useState<string | null>(null);
 
-    // borrowing book return 
+
+
+    // borrowing book returned -->
     const handleBookReturn = async (id: string) => {
 
-      if(!userEmail){
-        toast.error("Please login first") ;
-        return ;
+      if (!userEmail) {
+        toast.error("Please login first");
+        return;
       }
 
-      try{
+    try {
+      setIsReturning(id);
 
-        setIsReturning(id);
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/return-book/${id}`,{
-            method : "PATCH",
-            headers :{
-              "Content-Type" : "application/json",
-            },
-            body: JSON.stringify({
-                userEmail:userEmail,
-              }),
-          });
-
-        const data = await res.json();
-
-        if(!res.ok){
-          toast.error(data.message || "Failed to return book!");
-          return;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/return-book/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userEmail: userEmail,
+          }),
         }
+      );
 
-        // Remove the returned book from the table
-        setActiveBooks((prevBooks) =>
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Failed to return book!");
+        return;
+      }
+
+      // remove the returned book from the current list
+      setActiveBooks((prevBooks) =>
         prevBooks.filter((book) => book._id !== id)
-        );
+      );
 
         toast.success(data.message || "Book returned successfully!");
-      }
-      catch(error){
-          toast.error("Something went wrong. Please try again." ,);
-          console.log(error)
-      }
-      finally{
-        setIsReturning(null);
-      }
-    };
-
+    } 
+    catch (error) {
+      console.log(error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsReturning(null);
+    }
+  };
 
 
   return (
+
     <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
 
       {/* Section heading */}

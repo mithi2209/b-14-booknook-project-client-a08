@@ -12,10 +12,15 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const AddBooksForm = () => {
   
-  
+  const { data: session } = authClient.useSession();
+
+  const userEmail = session?.user?.email;
+  const userName = session?.user?.name;
+
   const [photoURL, setPhotoURL] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -42,7 +47,7 @@ const AddBooksForm = () => {
 
     
     // /handle add book/ 
-    const handleAddBook = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleAddBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       const form = e.currentTarget;
@@ -66,16 +71,18 @@ const AddBooksForm = () => {
         }
 
         // book information
-        const bookData = {
-          title: formData.get("title"),
-          author: formData.get("author"),
-          category: formData.get("category"),
-          totalCopies: Number(formData.get("totalCopies")), 
-          image: imageUrl,
-          description: formData.get("description"),
-          userName: formData.get("userName"),
-          userEmail: formData.get("userEmail"),
-        };
+      const bookData = {
+        Title: formData.get("title"),
+        Author: formData.get("author"),
+        Category: formData.get("category"),
+        TotalCopies: Number(formData.get("totalCopies")),
+        Image: imageUrl,
+        Description: formData.get("description"),
+        userName: formData.get("userName"),
+        userEmail: formData.get("userEmail"),
+      };
+
+        
 
         // post book information to Express backend
         const res = await fetch(
@@ -222,11 +229,12 @@ const AddBooksForm = () => {
                     Select a category
                   </option>
                   <option value="Fiction">Fiction</option>
+                  <option value="Fiction">Finance</option>
                   <option value="Science">Science</option>
                   <option value="History">History</option>
+                  <option value="History">Thriller</option>
                   <option value="Classic">Classic</option>
                   <option value="Romance">Romance</option>
-                  <option value="Fantasy">Fantasy</option>
                   <option value="Adventure">Adventure</option>
                   <option value="Mystery">Mystery</option>
                   <option value="Others">Others</option>
@@ -344,7 +352,8 @@ const AddBooksForm = () => {
                   id="userName"
                   name="userName"
                   type="text"
-                  placeholder="Your Name"
+                  value={userName ?? ""}
+                  readOnly
                   className="h-11 w-full rounded-lg border border-input
                   bg-background px-3 text-sm text-foreground
                   placeholder:text-muted-foreground
@@ -363,7 +372,8 @@ const AddBooksForm = () => {
                   id="userEmail"
                   name="userEmail"
                   type="email"
-                  placeholder="Your email"
+                  value={userEmail ?? ""}
+                  readOnly
                   className="h-11 w-full rounded-lg border border-input
                   bg-background px-3 text-sm text-foreground
                   placeholder:text-muted-foreground

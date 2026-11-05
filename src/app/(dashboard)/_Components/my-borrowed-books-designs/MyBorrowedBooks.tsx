@@ -9,6 +9,7 @@ import type { TBorrowedBook } from "@/lib/dataType";
 import BorrowedBooksCard from "./BorrowedBooksCard";
 import EmptyBorrowedBooks from "./EmptyBorrowedBooks";
 import BorrowedBooksHeader from "./BorrowedBooksHeader";
+import { toast } from "sonner";
 
 const MyBorrowedBooks = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -16,41 +17,50 @@ const MyBorrowedBooks = () => {
   const userEmail = session?.user?.email;
 
   const [borrowedBooks, setBorrowedBooks] = useState<TBorrowedBook[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isPending) return;
+  if (isPending) return;
 
-    if (!userEmail) {
-      setBorrowedBooks([]);
-      setLoading(false);
-      return;
-    }
+  if (!userEmail) {
+    setBorrowedBooks([]);
+    setLoading(false);
+    return;
+  }
 
-    const getBorrowedBooks = async () => {
-      try {
-        setLoading(true);
+  const getBorrowedBooks = async () => {
+    try {
+      setLoading(true);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
-        );
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+      );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch borrowed books");
-        }
+      const data = await res.json();
 
-        const data = await res.json();
+      
 
-        setBorrowedBooks(data);
-      } catch (error) {
-        console.error("Get borrowed books error:", error);
-        setBorrowedBooks([]);
-      } finally {
-        setLoading(false);
+      if (!res.ok) {
+        toast.error("Failed to fetch borrowed books");
+        return;
       }
-    };
 
-    getBorrowedBooks();
+      // Show only books that have not been returned
+      const activeBooks = data.filter(
+        (book: TBorrowedBook) => book.status === "borrowed"
+      );
+
+      setBorrowedBooks(activeBooks);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  getBorrowedBooks();
   }, [userEmail, isPending]);
   
 

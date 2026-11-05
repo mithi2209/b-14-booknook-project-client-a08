@@ -58,7 +58,15 @@ const MyBooksSection = () => {
     getMyBooks();
   }, [userEmail, isPending]);
 
-  if (isPending || loading) return <Loading />;
+    const handleBookUpdated = (updatedBook: TBook) => {
+      setMyBooks((prevBooks) =>
+        prevBooks.map((item) =>
+          item._id === updatedBook._id ? updatedBook : item
+        )
+      );
+    };
+
+    if (isPending || loading) return <Loading />;
 
   return (
    <section className="min-h-screen bg-background text-foreground">
@@ -70,7 +78,8 @@ const MyBooksSection = () => {
       {myBooks.length === 0 ? (
         <MyBooksEmpty />
       ) : (
-        <MyBookCardHeading books={myBooks} />
+        <MyBookCardHeading   books={myBooks}
+            onBookUpdated={handleBookUpdated} />
       )}
 
     </div>

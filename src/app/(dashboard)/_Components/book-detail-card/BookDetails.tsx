@@ -54,7 +54,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
           {/* Book Image Section */}
           <div className="relative flex items-center justify-center bg-[#FAF0DF] p-8 dark:bg-[#292820] sm:p-12">
 
-            <div className="absolute left-5 top-5 rounded-full bg-[#85896B]/15 px-4 py-2 text-xs font-semibold text-[#73775B] dark:text-[#D1DDBB]">
+            <div className="absolute left-5 top-5 rounded-full bg-[#85896B]/15 px-4 py-2 text-xs font-semibold text-[#73775B] dark:text-[#D1DDBB] border border-border-bg-card dark:border-[#85896B]/30">
               {book.Category}
             </div>
 
@@ -71,7 +71,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
 
             {/* Category */}
-            <span className="mb-5 w-fit rounded-full bg-[#85896B]/15 px-4 py-2 text-sm font-semibold text-[#73775B] dark:text-[#C5CCAE]">
+            <span className="mb-5 w-fit rounded-full bg-[#85896B]/15 px-4 py-2 text-sm font-semibold text-[#73775B] dark:text-[#C5CCAE] border border-border-bg-card dark:border-[#85896B]/30">
               {book.Category}
             </span>
 
@@ -89,9 +89,10 @@ const BookDetails = ({ book }: BookDetailsProps) => {
             </p>
 
             {/* Copies Left */}
-            <div className="mt-7 flex items-center justify-between rounded-2xl border border-[#85896B]/30 bg-[#85896B]/10 p-4">
+            <div className="mt-7 flex items-center justify-between rounded-2xl border border-border-bg-card dark:border-[#85896B]/30 bg-[#85896B]/10 p-4">
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-[#85896B]/20 p-3 text-[#85896B]">
+
+                <div className="rounded-xl dark:text-[#D1DDBB] bg-[#85896B]/20 p-3 text-[#85896B]">
                   <BookOpen size={22} />
                 </div>
 
@@ -110,7 +111,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
               </div>
 
               <span
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold border border-border-bg-card dark:border-[#85896B]/30 ${
                   copiesLeft > 0
                     ? "bg-[#85896B]/20 text-[#66704F] dark:text-[#D1DDBB]"
                     : "bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-300"
@@ -133,7 +134,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
 
             {/* Added By */}
             <div className="mt-7 flex items-center gap-3 border-t border-border pt-6">
-              <div className="rounded-full bg-[#85896B]/15 p-3 text-[#85896B]">
+              <div className="rounded-full dark:text-[#D1DDBB] bg-[#85896B]/15 p-3 text-[#85896B]">
                 <UserRound size={21} />
               </div>
 

@@ -10,9 +10,10 @@ import { TBook } from "@/lib/dataType";
 type Props = {
   books: TBook[];
   onBookUpdated: (updatedBook: TBook) => void;
+  onBookDeleted: (bookId: string) => void;
 };
 
-const MyBookCardsSection = ({ books , onBookUpdated}: Props) => {
+const MyBookCardsSection = ({ books , onBookUpdated , onBookDeleted}: Props) => {
     return (
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2 mt-9">
 
@@ -21,6 +22,7 @@ const MyBookCardsSection = ({ books , onBookUpdated}: Props) => {
           key={book._id}
           book={book}
           onBookUpdated={onBookUpdated}
+          onBookDeleted={onBookDeleted}
         />
       ))}
 

@@ -13,10 +13,13 @@ import { authClient } from "@/lib/auth-client";
 import {
   ArrowLeft,
   UserRound,
+  Upload,
   Image as ImageIcon,
   Save,
   LoaderCircle,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type UpdateProfileFormProps = {
   user: TUser;
@@ -28,53 +31,86 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
   const [name, setName] = useState(user.name);
   const [imageUrl, setImageUrl] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
 
-  const handleUpdateProfile = async (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
 
-    const checkingName = name.trim();
-    const checkingImageUrl = imageUrl.trim();
+      // Uploading file image
+    const uploadImage = async (file: File) => {
+    const formData = new FormData();
 
-    if (!checkingName) {
-      toast.error("Name cannot be empty");
-      return;
+    formData.append("image", file);
+
+    const res = await fetch("/api/upload-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Image upload failed");
     }
 
-    setIsSaving(true);
+    return data.imageUrl;
+  };
+
+
+      const handleUpdateProfile = async (
+        e: FormEvent<HTMLFormElement>
+
+        ) => {
+
+        e.preventDefault();
+
+        const checkingName = name.trim();
+        const checkingImageUrl = imageUrl.trim();
+
+        if (!checkingName) {
+          toast.error("Name cannot be empty");
+          return;
+        }
+
+        setIsSaving(true);
 
         try {
-        
+         
+          let finalImageURL = checkingImageUrl || undefined;
+
+     
+        if (photoFile) {
+          finalImageURL = await     uploadImage(photoFile);
+        }
+
         const updateData = {
-            name: checkingName,
-            ...(checkingImageUrl ? { image: checkingImageUrl } : {}),
+          name: checkingName,
+          ...(finalImageURL ? { image: finalImageURL } : {}),
         };
 
-        const { error } = await authClient.updateUser(updateData);
+       const { error } = await authClient.updateUser(updateData);
 
-        if (error) {
-            toast.error(error.message);
-            return;
-        }
+          if (error) {
+              toast.error(error.message);
+             return;
+          }
 
-        toast.success("Profile updated successfully!");
+          toast.success("Profile updated successfully!");
 
-       
-        setName(checkingName);
-        setImageUrl("");
+          
+          setName(checkingName);
+          setImageUrl("");
+          setPhotoFile(null);
 
-        router.push("/my-profile");
-        router.refresh();
+            router.push("/my-profile");
+            router.refresh();
 
-        } 
-        catch (error) {
-        
-            toast.error("Something went wrong. Please try again.");
-        } 
-        finally {
-            setIsSaving(false);
-        }
+            } 
+            catch (error) {
+            
+                toast.error("Something went wrong. Please try again.");
+            } 
+            finally {
+                setIsSaving(false);
+            }
   };
 
   return (
@@ -180,38 +216,60 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
                 </h3>
 
                 <p className="mt-1 text-xs leading-5 text-[#49372D]/60 dark:text-[#FAF0DF]/60">
-                  Add a photo URL below to change your profile picture.
-                  Use a publicly accessible image link.
+                  Add a photo URL or upload an image from your device to change your profile picture.
+                  
                 </p>
               </div>
             </div>
 
             {/* PHOTO URL */}
-            <div>
-              <label
-                htmlFor="imageUrl"
-                className="mb-2 block text-sm font-medium text-[#49372D] dark:text-[#FAF0DF]"
-              >
-                Profile Photo URL
-              </label>
+            <div className="space-y-1.5">
+                <Label>
+                  Profile Photo{" "}
+                  <span className="font-normal text-[#85896B]"></span>
+                </Label>
 
-              <div className="relative">
-                <ImageIcon
-                  size={18}
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#85896B]"
-                />
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <div className="relative flex-1">
+                    <ImageIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
+                   <input
+                      id="imageUrl"
+                      type="url"
+                      name="imageUrl"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="Paste your photo URL here"
+                      className="w-full rounded-xl border border-[#E8BFA5] bg-white/50 py-3.5 pl-11 pr-4 text-sm text-[#49372D] outline-none transition placeholder:text-[#49372D]/40 focus:border-[#85896B] focus:ring-2 focus:ring-[#85896B]/20 dark:border-[#69745D] dark:bg-[#30392F]/50 dark:text-[#FAF0DF] dark:placeholder:text-[#FAF0DF]/40"
+                    />
+                  </div>
 
-                <input
-                  id="imageUrl"
-                  type="url"
-                  name="imageUrl"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="Paste your photo URL here"
-                  className="w-full rounded-xl border border-[#E8BFA5] bg-white/50 py-3.5 pl-11 pr-4 text-sm text-[#49372D] outline-none transition placeholder:text-[#49372D]/40 focus:border-[#85896B] focus:ring-2 focus:ring-[#85896B]/20 dark:border-[#69745D] dark:bg-[#30392F]/50 dark:text-[#FAF0DF] dark:placeholder:text-[#FAF0DF]/40"
-                />
+                  {/* photo file upload */}
+                  <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-36.25">
+                    <Upload className="h-4 w-4" />
+                    
+                    <span className="max-w-26.25 truncate">
+                      {photoFile ? photoFile.name : "Upload Photo"}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+
+                          if (file) {
+                            setPhotoFile(file);
+                          }
+                      }}
+                    />
+
+                  </label>
+                </div>
+                <p className="text-xs text-[#85896B] dark:text-[#A9B49A]">
+                  Use a photo URL or upload an image from your device.
+                </p>
               </div>
-            </div>
+      
           </div>
         </div>
 

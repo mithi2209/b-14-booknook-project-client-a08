@@ -13,8 +13,11 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const AddBooksForm = () => {
+
+  const router = useRouter();
   
   const { data: session } = authClient.useSession();
 
@@ -64,13 +67,13 @@ const AddBooksForm = () => {
           imageUrl = await uploadImage(photoFile);
         }
 
-        //check whether an image was provided
+        //if image was provided
         if (!imageUrl) {
           toast.error("Please provide a book image!");
           return;
         }
 
-        // book information
+     
       const bookData = {
         Title: formData.get("title"),
         Author: formData.get("author"),
@@ -84,7 +87,6 @@ const AddBooksForm = () => {
 
         
 
-        // post book information to Express backend
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_API_URL}/add-books`,
           {
@@ -98,16 +100,15 @@ const AddBooksForm = () => {
 
         const data = await res.json();
 
-        // check backend response
+        
         if (!res.ok) {
           throw new Error(data.message || "Failed to add book");
         }
 
-        // success message
+        
         toast.success("Book added successfully!");
-
-        // reset form
         form.reset();
+        router.push("/my-books");
         setPhotoURL("");
         setPhotoFile(null);
 

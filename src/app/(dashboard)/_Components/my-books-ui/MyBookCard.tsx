@@ -19,9 +19,12 @@ import DeleteBookModal from "./DeleteBookModal";
 type Props = {
   book: TBook;
   onBookUpdated: (updatedBook: TBook) => void;
+  onBookDeleted: (bookId: string) => void ;
+
 };
 
-const MyBookCard = ({ book, onBookUpdated }: Props) => {
+const MyBookCard = ({ book, onBookUpdated , onBookDeleted}: Props) => {
+
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
@@ -193,7 +196,10 @@ const MyBookCard = ({ book, onBookUpdated }: Props) => {
       )}
 
       {showDelete && (
-        <DeleteBookModal book={book} setShowDelete={setShowDelete} />
+        <DeleteBookModal 
+          book={book} 
+          setShowDelete={setShowDelete} 
+          onBookDeleted={onBookDeleted}/>
       )}
     </>
   );

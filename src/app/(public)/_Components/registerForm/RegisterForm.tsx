@@ -35,6 +35,27 @@ const RegisterForm = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
 
+    // Uploading file image
+    const uploadImage = async (file: File) => {
+    const formData = new FormData();
+
+    formData.append("image", file);
+
+    const res = await fetch("/api/upload-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Image upload failed");
+    }
+
+    return data.imageUrl;
+  };
+
+
   const validatePassword = (value: string) => {
     if (value.length < 6) {
       return "Password must be at least 6 characters.";
@@ -76,13 +97,20 @@ const RegisterForm = () => {
     setIsRegister(true);
 
     try {
-      const { data, error } = await authClient.signUp.email({
-        name,
-        email,
-        password,
-        image: photoURL || undefined,
-        callbackURL: "/login",
-      });
+
+        let imageURL = photoURL || undefined;
+
+        if (photoFile) {
+          imageURL = await uploadImage(photoFile);
+        }
+
+        const { data, error } = await authClient.signUp.email({
+          name,
+          email,
+          password,
+          image:  imageURL,
+          callbackURL: "/login",
+        });
 
       if (error) {
         toast.error(error.message || "Registration failed.");
@@ -96,6 +124,7 @@ const RegisterForm = () => {
       }
 
       toast.error("Registration failed. Please try again.");
+
     } catch (error) {
       toast.error(
         `Registration failed: ${
@@ -207,7 +236,7 @@ const RegisterForm = () => {
                     />
                   </div>
 
-                  {/* photo upload */}
+                  {/* photo file upload */}
                   <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-36.25">
                     <Upload className="h-4 w-4" />
                     
@@ -218,12 +247,15 @@ const RegisterForm = () => {
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={() => {
-                        toast.info(
-                          "File uploads need to be connected to your image storage.",
-                        );
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+
+                          if (file) {
+                            setPhotoFile(file);
+                          }
                       }}
                     />
+
                   </label>
                 </div>
                 <p className="text-xs text-[#85896B] dark:text-[#A9B49A]">

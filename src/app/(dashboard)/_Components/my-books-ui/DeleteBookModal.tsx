@@ -2,17 +2,70 @@
 
 "use client";
 
+
+import { toast } from "sonner";
+import { useState } from "react";
 import { TBook } from "@/lib/dataType";
+import { authClient } from "@/lib/auth-client";
 import { AlertTriangle, Trash2, X } from "lucide-react";
 
 
 type DeleteBookModalProps = {
   book: TBook;
   setShowDelete: (value: boolean) => void;
+  onBookDeleted: (bookId: string) => void;
 };
 
 
-const DeleteBookModal = ({ book , setShowDelete }: DeleteBookModalProps ) => {
+const DeleteBookModal = ({ book ,
+     setShowDelete , onBookDeleted}: DeleteBookModalProps ) => {
+
+    const { data: session } = authClient.useSession();
+
+    const userEmail = session?.user?.email;
+
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteBook = async () => {
+        if (!userEmail) {
+            toast.error("Please login first");
+            return;
+        }
+
+        try {
+            setIsDeleting(true);
+
+            const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API_URL}/delete-book/${book._id}`,
+            {
+                method: "DELETE",
+                headers: {
+                "Content-Type": "application/json",
+                },  
+                body: JSON.stringify({ userEmail }),
+            }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+            toast.error(data.message || "Failed to delete book");
+            return;
+            }
+
+            onBookDeleted(book._id);
+
+            toast.success("Book deleted successfully!");
+
+            setShowDelete(false);
+        } 
+        catch (error) {
+            console.log(error);
+            toast.error("Book deleted unsuccessful!");
+        } finally {
+            setIsDeleting(false);
+        }
+};
 
     return (
 
@@ -82,18 +135,24 @@ const DeleteBookModal = ({ book , setShowDelete }: DeleteBookModalProps ) => {
 
             <button
               type="button"
+
               onClick={() => setShowDelete(false)}
+
               className="rounded-xl border border-deep-olive/25 px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-deep-olive/10 dark:border-terracotta/30 dark:hover:bg-terracotta/10"
             >
               Cancel
             </button>
 
+              {/* delete btn */}
             <button
               type="button"
+              onClick={handleDeleteBook}
+              disabled={isDeleting}
+
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700"
             >
               <Trash2 size={16} />
-              Yes, Delete
+              {isDeleting ? "Deleting..." : "Yes, Delete"}
             </button>
 
           </div>

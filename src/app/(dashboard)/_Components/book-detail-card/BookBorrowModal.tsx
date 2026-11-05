@@ -408,13 +408,16 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
         type="button"
         onClick={handleBorrowClick}
         disabled={isPending || isBorrowing}
-        className={`group flex h-11 w-full items-center rounded-lg border px-4 shadow-sm transition-all duration-300 ${
-          isAlreadyBorrowed
-            ? "cursor-pointer border-[#85896B]/40 bg-[#A9B49A]/20 text-[#66704F]/70 opacity-70 hover:bg-[#A9B49A]/30 dark:border-[#A9B49A]/30 dark:bg-[#A9B49A]/10 dark:text-[#A9B49A]/60 dark:hover:bg-[#A9B49A]/20"
+        className={`group flex h-11 w-full items-center rounded-lg border px-4 shadow-sm transition-all duration-300 
+          ${
+            isAlreadyBorrowed
+            ? "cursor-pointer border-[#85896B]/40 bg-[#A9B49A]/20 text-dark-olive  opacity-70 hover:bg-[#A9B49A]/30 dark:border-[#A9B49A]/30 dark:bg-[#A9B49A]/10 dark:text-warm-ivory dark:hover:bg-[#A9B49A]/20"
+
             : book.AvailableCopies <= 0
-              ? "cursor-pointer border-[#C58B75]/40 bg-[#E8BFA5]/20 text-[#A56E58]/70 opacity-75 hover:bg-[#E8BFA5]/30 dark:border-[#C58B75]/30 dark:bg-[#49372D]/40 dark:text-[#E8BFA5]/70"
-              : "border-[#85896B] bg-[#85896B] text-[#FAF0DF] hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-[#30392F] dark:hover:bg-[#BCC6AC]"
-        }`}
+
+              ? "cursor-pointer border-[#C58B75]/40 bg-[#E8BFA5]/20 text-[#A56E58]/70 opacity-75 hover:bg-[#E8BFA5]/30 dark:border-[#C58B75]/30 dark:bg-[#49372D]/40 dark:text[#E8BFA5]/70"
+              : "border-[#85896B] bg-[#85896B] text-[#FAF0DF] hover:-translate-y-0.5 hover:bg-[#74795C] hover:shadow-md dark:border-[#A9B49A] dark:bg-[#A9B49A] dark:text-muted-sage-olive dark:hover:bg-[#BCC6AC]"
+          }`}
       >
         <BookOpen size={18} className="mr-2" />
 
@@ -430,7 +433,7 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
       {/* Borrow Confirmation Modal */}
       <DialogContent className="w-[calc(100%-2rem)] rounded-2xl border-border bg-card sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
+          <DialogTitle className="text-xl font-bold ">
             Borrow This Book
           </DialogTitle>
 

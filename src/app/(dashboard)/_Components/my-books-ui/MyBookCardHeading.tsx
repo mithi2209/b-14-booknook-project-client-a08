@@ -8,10 +8,11 @@ import { BookOpen, LibraryBig, Sparkles } from "lucide-react";
 type Props = {
   books: TBook[];
   onBookUpdated: (updatedBook: TBook) => void;
+  onBookDeleted: (bookId: string) => void;
 };
 
 
-const MyBookCardHeading = ({ books , onBookUpdated }: Props) => {
+const MyBookCardHeading = ({ books , onBookUpdated , onBookDeleted }: Props) => {
 
   return (
     <section className="mt-12 space-y-6 sm:mt-12 sm:space-y-7 lg:mt-16">
@@ -72,8 +73,9 @@ const MyBookCardHeading = ({ books , onBookUpdated }: Props) => {
       {/* Book Cards */}
       <MyBookCardsSection   
         books={books}
-        onBookUpdated={onBookUpdated}  />
-        
+        onBookUpdated={onBookUpdated} 
+        onBookDeleted={onBookDeleted} />
+
     </section>
   );
 };

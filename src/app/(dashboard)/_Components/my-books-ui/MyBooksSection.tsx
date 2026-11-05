@@ -58,11 +58,20 @@ const MyBooksSection = () => {
     getMyBooks();
   }, [userEmail, isPending]);
 
+
+    // update a book
     const handleBookUpdated = (updatedBook: TBook) => {
       setMyBooks((prevBooks) =>
         prevBooks.map((item) =>
           item._id === updatedBook._id ? updatedBook : item
         )
+      );
+    };
+
+    // delete a book 
+    const handleBookDeleted = (bookId: string) => {
+      setMyBooks((prevBooks) =>
+        prevBooks.filter((book) => book._id !== bookId)
       );
     };
 
@@ -79,7 +88,8 @@ const MyBooksSection = () => {
         <MyBooksEmpty />
       ) : (
         <MyBookCardHeading   books={myBooks}
-            onBookUpdated={handleBookUpdated} />
+            onBookUpdated={handleBookUpdated} 
+            onBookDeleted={handleBookDeleted}/>
       )}
 
     </div>

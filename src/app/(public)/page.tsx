@@ -21,9 +21,10 @@ export default function HomePage() {
     <>
       <BannerSlider />
       <NewArrivals />
-      <TopCategories />
       <FeaturedAuthors/>
       <HowBorrowingBooks/>
+      <TopCategories />
+      
       <ReadersReviews/>
       
     </>

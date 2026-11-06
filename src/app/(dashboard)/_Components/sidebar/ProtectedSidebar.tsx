@@ -16,6 +16,7 @@ import {Library,BookPlus, ClipboardList,Bookmark,ChevronRight,
   Moon,
   LogOut,
 } from "lucide-react";
+import BookSearch from "@/components/shared/BookSearch";
 
 const menuItems = [
   {
@@ -112,6 +113,7 @@ const ProtectedSidebar = () => {
         </div>
       </Link>
 
+     
       {/* Menu Heading */}
       <div className="mb-4">
         <p className="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
@@ -150,10 +152,18 @@ const ProtectedSidebar = () => {
               {isActive && (
                 <ChevronRight size={16} className="ml-auto" />
               )}
+   
+
             </Link>
           );
+          
         })}
       </nav>
+
+      {/* search bar */}
+      <div className="mt-7">
+        <BookSearch />
+      </div>
 
       {/* Account & Appearance Section */}
       <div className="mt-6 border-t border-border pt-4">

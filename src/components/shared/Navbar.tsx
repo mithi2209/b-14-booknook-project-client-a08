@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Menu, X, Sun, Moon } from "lucide-react";
 
 import AuthButtons from "@/components/shared/AuthButtons";
+import BookSearch from "./BookSearch";
 
 
 export const navLinks = [
@@ -71,6 +72,11 @@ const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden items-center justify-end gap-3 lg:flex">
+
+          {/* searchbar */}
+          
+          <BookSearch variant="navbar" />
+
           {/* Theme Toggle */}
           <Button
             variant="ghost"
@@ -125,6 +131,11 @@ const Navbar = () => {
               border-t border-border
               bg-background px-5 py-5 shadow-md lg:hidden
             ">
+              {/* SEARCHBAR */}
+           <div className="mb-5">
+              <BookSearch />
+            </div>
+
           <div className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <Link

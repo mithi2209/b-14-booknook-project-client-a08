@@ -36,7 +36,7 @@ const itemVariants = {
 
 const TopCategories = () => {
   return (
-    <section className="bg-deep-olive px-4 py-9 transition-colors duration-300 sm:py-11">
+    <section className="bg-deep-olive px-4 py-9 transition-colors duration-300 sm:py-14">
       <div className="container mx-auto">
         {/* Section Heading */}
         <motion.div

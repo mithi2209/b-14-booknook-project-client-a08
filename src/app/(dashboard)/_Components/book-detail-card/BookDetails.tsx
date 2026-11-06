@@ -10,9 +10,11 @@ import {
   BookOpen,
   UserRound,
 } from "lucide-react";
+
 import { TBook } from "@/lib/dataType";
-import BookBorrowModal from "./BookBorrowModal";
 import { useState , useEffect } from "react";
+import BookBorrowModal from "./BookBorrowModal";
+
 
 
 type BookDetailsProps = {

@@ -12,9 +12,10 @@ type MyProfileProps = {
 
 const MyProfilePage = ({ user }: MyProfileProps) => {
   return (
-
     <div className="space-y-8">
+
       {/* PAGE HEADING */}
+      
       <div className="pt-8">
         {/* BACK TO HOME */}
         <Link
@@ -100,7 +101,7 @@ const MyProfilePage = ({ user }: MyProfileProps) => {
 
               <div className="min-w-0">
                 <p className="text-xs text-[#85896B]">Full Name</p>
-                <p className="mt-1 break-words font-medium text-[#49372D] dark:text-[#FAF0DF]">
+                <p className="mt-1 wrap-break-word font-medium text-[#49372D] dark:text-[#FAF0DF]">
                   {user.name}
                 </p>
               </div>

@@ -2,13 +2,6 @@
 
 "use client";
 
-import Link from "next/link";
-import { toast } from "sonner";
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
-
-import type { TUser } from "@/lib/dataType";
-import { authClient } from "@/lib/auth-client";
 
 import {
   ArrowLeft,
@@ -18,14 +11,23 @@ import {
   Save,
   LoaderCircle,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
+import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+import type { TUser } from "@/lib/dataType";
+import { authClient } from "@/lib/auth-client";
+
 import { Label } from "@/components/ui/label";
+import { useState, type FormEvent } from "react";
 
 type UpdateProfileFormProps = {
   user: TUser;
 };
 
 const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
+  
   const router = useRouter();
 
   const [name, setName] = useState(user.name);
@@ -33,9 +35,8 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
 
-
-      // Uploading file image
-    const uploadImage = async (file: File) => {
+  // Uploading file image
+  const uploadImage = async (file: File) => {
     const formData = new FormData();
 
     formData.append("image", file);
@@ -54,68 +55,55 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
     return data.imageUrl;
   };
 
+  const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-      const handleUpdateProfile = async (
-        e: FormEvent<HTMLFormElement>
+    const checkingName = name.trim();
+    const checkingImageUrl = imageUrl.trim();
 
-        ) => {
+    if (!checkingName) {
+      toast.error("Name cannot be empty");
+      return;
+    }
 
-        e.preventDefault();
+    setIsSaving(true);
 
-        const checkingName = name.trim();
-        const checkingImageUrl = imageUrl.trim();
+    try {
+      let finalImageURL = checkingImageUrl || undefined;
 
-        if (!checkingName) {
-          toast.error("Name cannot be empty");
-          return;
-        }
+      if (photoFile) {
+        finalImageURL = await uploadImage(photoFile);
+      }
 
-        setIsSaving(true);
+      const updateData = {
+        name: checkingName,
+        ...(finalImageURL ? { image: finalImageURL } : {}),
+      };
 
-        try {
-         
-          let finalImageURL = checkingImageUrl || undefined;
+      const { error } = await authClient.updateUser(updateData);
 
-     
-        if (photoFile) {
-          finalImageURL = await     uploadImage(photoFile);
-        }
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
 
-        const updateData = {
-          name: checkingName,
-          ...(finalImageURL ? { image: finalImageURL } : {}),
-        };
+      toast.success("Profile updated successfully!");
 
-       const { error } = await authClient.updateUser(updateData);
+      setName(checkingName);
+      setImageUrl("");
+      setPhotoFile(null);
 
-          if (error) {
-              toast.error(error.message);
-             return;
-          }
-
-          toast.success("Profile updated successfully!");
-
-          
-          setName(checkingName);
-          setImageUrl("");
-          setPhotoFile(null);
-
-            router.push("/my-profile");
-            router.refresh();
-
-            } 
-            catch (error) {
-            
-                toast.error("Something went wrong. Please try again.");
-            } 
-            finally {
-                setIsSaving(false);
-            }
+      router.push("/my-profile");
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
-
       {/* PAGE HEADING */}
       <div className="pt-8">
         <Link
@@ -141,8 +129,8 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
 
       <form
         onSubmit={handleUpdateProfile}
-        className="overflow-hidden rounded-2xl border border-[#E8BFA5] bg-[#FFF9F0] shadow-sm dark:border-[#69745D] dark:bg-[#3F4A3A]">
-
+        className="overflow-hidden rounded-2xl border border-[#E8BFA5] bg-[#FFF9F0] shadow-sm dark:border-[#69745D] dark:bg-[#3F4A3A]"
+      >
         {/* FORM HEADING */}
         <div className="border-b border-[#E8BFA5] px-6 py-5 dark:border-[#69745D] sm:px-8">
           <h2 className="text-lg font-semibold text-[#49372D] dark:text-[#FAF0DF]">
@@ -155,7 +143,6 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
         </div>
 
         <div className="space-y-6 px-6 py-7 sm:px-8">
-
           {/* NAME FIELD */}
           <div>
             <label
@@ -186,14 +173,12 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
 
           {/* PROFILE PHOTO */}
           <div className="space-y-4">
-
             <label className="block text-sm font-medium text-[#49372D] dark:text-[#FAF0DF]">
               Profile Photo
             </label>
 
             {/* AVATAR + TEXT */}
             <div className="flex flex-col items-center gap-5 rounded-xl border-2 border-dotted border-[#E8BFA5] bg-white/40 p-5 dark:border-[#69745D] dark:bg-[#30392F]/30 sm:flex-row">
-
               {/* CURRENT AVATAR */}
               <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-[#E8BFA5] bg-[#F0E2D4] dark:border-[#69745D]">
                 {user.image ? (
@@ -216,66 +201,63 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
                 </h3>
 
                 <p className="mt-1 text-xs leading-5 text-[#49372D]/60 dark:text-[#FAF0DF]/60">
-                  Add a photo URL or upload an image from your device to change your profile picture.
-                  
+                  Add a photo URL or upload an image from your device to change
+                  your profile picture.
                 </p>
               </div>
             </div>
 
             {/* PHOTO URL */}
             <div className="space-y-1.5">
-                <Label>
-                  Profile Photo{" "}
-                  <span className="font-normal text-[#85896B]"></span>
-                </Label>
+              <Label>
+                Profile Photo{" "}
+                <span className="font-normal text-[#85896B]"></span>
+              </Label>
 
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <div className="relative flex-1">
-                    <ImageIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
-                   <input
-                      id="imageUrl"
-                      type="url"
-                      name="imageUrl"
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      placeholder="Paste your photo URL here"
-                      className="w-full rounded-xl border border-[#E8BFA5] bg-white/50 py-3.5 pl-11 pr-4 text-sm text-[#49372D] outline-none transition placeholder:text-[#49372D]/40 focus:border-[#85896B] focus:ring-2 focus:ring-[#85896B]/20 dark:border-[#69745D] dark:bg-[#30392F]/50 dark:text-[#FAF0DF] dark:placeholder:text-[#FAF0DF]/40"
-                    />
-                  </div>
-
-                  {/* photo file upload */}
-                  <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-36.25">
-                    <Upload className="h-4 w-4" />
-                    
-                    <span className="max-w-26.25 truncate">
-                      {photoFile ? photoFile.name : "Upload Photo"}
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-
-                          if (file) {
-                            setPhotoFile(file);
-                          }
-                      }}
-                    />
-
-                  </label>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative flex-1">
+                  <ImageIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#85896B]" />
+                  <input
+                    id="imageUrl"
+                    type="url"
+                    name="imageUrl"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="Paste your photo URL here"
+                    className="w-full rounded-xl border border-[#E8BFA5] bg-white/50 py-3.5 pl-11 pr-4 text-sm text-[#49372D] outline-none transition placeholder:text-[#49372D]/40 focus:border-[#85896B] focus:ring-2 focus:ring-[#85896B]/20 dark:border-[#69745D] dark:bg-[#30392F]/50 dark:text-[#FAF0DF] dark:placeholder:text-[#FAF0DF]/40"
+                  />
                 </div>
-                <p className="text-xs text-[#85896B] dark:text-[#A9B49A]">
-                  Use a photo URL or upload an image from your device.
-                </p>
+
+                {/* photo file upload */}
+                <label className="flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[#85896B] bg-[#A9B49A]/20 px-3 text-sm font-medium text-[#49372D] transition hover:bg-[#A9B49A]/40 dark:text-[#FAF0DF] sm:max-w-36.25">
+                  <Upload className="h-4 w-4" />
+
+                  <span className="max-w-26.25 truncate">
+                    {photoFile ? photoFile.name : "Upload Photo"}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+
+                      if (file) {
+                        setPhotoFile(file);
+                      }
+                    }}
+                  />
+                </label>
               </div>
-      
+              <p className="text-xs text-[#85896B] dark:text-[#A9B49A]">
+                Use a photo URL or upload an image from your device.
+              </p>
+            </div>
           </div>
         </div>
 
         {/* BUTTONS */}
         <div className="flex flex-col-reverse gap-3 border-t border-[#E8BFA5] bg-[#F0E2D4]/40 px-6 py-5 dark:border-[#69745D] dark:bg-[#30392F]/30 sm:flex-row sm:justify-end sm:px-8">
-
           <Link
             href="/"
             className="inline-flex items-center justify-center rounded-xl border border-[#E8BFA5] px-5 py-3 text-sm font-medium text-[#49372D] transition hover:bg-[#F0E2D4] dark:border-[#69745D] dark:text-[#FAF0DF] dark:hover:bg-[#3F4A3A]"

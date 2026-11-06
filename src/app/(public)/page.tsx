@@ -4,9 +4,10 @@ import type { Metadata } from "next";
 import NewArrivals from "@/components/homepage/NewArrivals";
 import BannerSlider from "@/components/homepage/BannerSlider";
 import TopCategories from "@/components/homepage/TopCategories";
-import HowBorrowingBooks from "@/components/homepage/HowBorrowingBooks";
-import FeaturedAuthors from "@/components/homepage/FeaturedAuthors";
 import ReadersReviews from "@/components/homepage/ReadersReviews";
+import FeaturedAuthors from "@/components/homepage/FeaturedAuthors";
+import HowBorrowingBooks from "@/components/homepage/HowBorrowingBooks";
+
 
 
 
@@ -20,13 +21,11 @@ export default function HomePage() {
     <>
       <BannerSlider />
       <NewArrivals />
-      <HowBorrowingBooks/>
-
-      
-
       <TopCategories />
       <FeaturedAuthors/>
+      <HowBorrowingBooks/>
       <ReadersReviews/>
+      
     </>
   );
 }

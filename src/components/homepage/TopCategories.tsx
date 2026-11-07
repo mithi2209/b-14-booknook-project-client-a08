@@ -12,10 +12,10 @@ const categories = [
   { name: "Science", slug: "science" },
   { name: "History", slug: "history" },
   { name: "Technology", slug: "technology" },
-  { name: "Biography", slug: "biography" },
   { name: "Mystery", slug: "mystery" },
   { name: "Romance", slug: "romance" },
   { name: "Art & Design", slug: "art-design" },
+  { name: "Others", slug: "others" },
 ];
 
 const containerVariants = {

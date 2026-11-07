@@ -26,8 +26,6 @@ const CategoryPage = async ({ params }:
    const { category } = await params;
 
 
-console.log("Category from URL:", category);
-console.log("Category names:", categoryNames);
 
     const categoryName = categoryNames[category.toLowerCase()];
 
@@ -43,11 +41,10 @@ console.log("Category names:", categoryNames);
         cache: "no-store",
         }
     );
-    
-    console.log("API Status:", res.status); 
+   
 
     const BooksData: TBook[] = await res.json();
-    console.log("Books Data:", BooksData);
+
 
   return (
 

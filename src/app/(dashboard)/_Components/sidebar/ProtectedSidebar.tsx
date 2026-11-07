@@ -24,15 +24,16 @@ const menuItems = [
     href: "/",
     icon: House,
   },
-  {
-    title: "My Books",
-    href: "/my-books",
-    icon: Library,
-  },
+
   {
     title: "Add Books",
     href: "/add-books",
     icon: BookPlus,
+  },
+    {
+    title: "My Books",
+    href: "/my-books",
+    icon: Library,
   },
   {
     title: "My Borrowed",

@@ -11,10 +11,10 @@ const categories = [
   { name: "Fiction", slug: "fiction" },
   { name: "Science", slug: "science" },
   { name: "History", slug: "history" },
-  { name: "Technology", slug: "technology" },
   { name: "Mystery", slug: "mystery" },
   { name: "Romance", slug: "romance" },
   { name: "Art & Design", slug: "art-design" },
+  { name: "Kid", slug: "kid" },
   { name: "Others", slug: "others" },
 ];
 

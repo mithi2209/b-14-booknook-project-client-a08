@@ -8,7 +8,9 @@ type BookCardProps = {
 };
 
 const BooksCard = ({ book }: BookCardProps) => {
+
   return (
+    
     <div className="group overflow-hidden rounded-2xl border border-[#D8C8A9] bg-[#FFF9F0] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-[#626B50] dark:bg-[#3F4A3A]">
       {/* Book Image */}
       <div className="relative flex h-72 items-center justify-center overflow-hidden bg-linear-to-br from-[#E8DFC9] via-[#F3EBDD] to-[#D9DCC5] p-5 dark:from-[#46513F] dark:via-[#3F4A3A] dark:to-[#30392F]">

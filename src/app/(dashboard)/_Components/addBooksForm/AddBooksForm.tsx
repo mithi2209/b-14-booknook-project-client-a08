@@ -98,7 +98,7 @@ const AddBooksForm = () => {
 
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API_URL}/add-books`,
+          `${process.env.NEXT_PUBLIC_API_URL}/add-books`,
           {
             method: "POST",
             headers: {

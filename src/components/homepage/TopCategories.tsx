@@ -35,6 +35,7 @@ const itemVariants = {
 };
 
 const TopCategories = () => {
+  
   return (
     <section className="bg-deep-olive px-4 py-9 transition-colors duration-300 sm:py-14">
       <div className="container mx-auto">
@@ -107,6 +108,7 @@ const TopCategories = () => {
           className="grid grid-cols-1 gap-x-10 sm:grid-cols-2"
         >
           {categories.map((category, index) => (
+
             <motion.div key={category.slug} variants={itemVariants}>
               <Link
                 href={`/categories/${category.slug}`}

@@ -52,7 +52,7 @@ const MyBooksSection = ({ token }: Props) => {
 
         // user books fetching
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API_URL}/my-books/${encodeURIComponent(userEmail)}` ,{
+          `${process.env.NEXT_PUBLIC_API_URL}/my-books/${encodeURIComponent(userEmail)}` ,{
 
             headers:{
               Authorization: `Bearer ${token}`,

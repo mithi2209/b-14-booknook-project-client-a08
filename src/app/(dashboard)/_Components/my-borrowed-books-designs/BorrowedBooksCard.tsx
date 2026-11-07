@@ -51,7 +51,7 @@ const BorrowedBooksCard = ({ books }: BorrowedBooksProps) => {
       const token = await getTokenFromClient();
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/return-book/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/return-book/${id}`,
         {
           method: "PATCH",
           headers: {

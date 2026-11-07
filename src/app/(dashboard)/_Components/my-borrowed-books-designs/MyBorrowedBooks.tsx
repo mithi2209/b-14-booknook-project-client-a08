@@ -45,7 +45,7 @@ const MyBorrowedBooks = ({ token }:Props) => {
         }
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}` , {
+        `${process.env.NEXT_PUBLIC_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}` , {
           headers:{
             authorization : `Bearer ${token}`,
           }

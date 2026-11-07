@@ -18,7 +18,7 @@ const BookDetailsPage = async (
     const token = await retrieveTokenFromServer();
     
 
-    const apiUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/book-details/${slug}`
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/book-details/${slug}`
    
 
     const res = await fetch(apiUrl, {

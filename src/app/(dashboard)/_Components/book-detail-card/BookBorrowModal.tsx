@@ -36,44 +36,6 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
   const { data: session, isPending } = authClient.useSession();
   const userEmail = session?.user?.email;
 
- 
-
-  // Checking if the current user already borrowed this book
-  // const handleBorrowStats = async () => {
-  //   if (!userEmail) return;
-
-  //   try {
-
-  //     // get token from client 
-  //     const token = await getTokenFromClient();
-
-  //     const res = await fetch(
-
-  //       `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`,{
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (!res.ok) {
-  //       throw new Error("Failed to check borrowing status");
-  //     }
-
-  //     const borrowedBooks = await res.json();
-
-  //     const alreadyBorrowed =
-  //       Array.isArray(borrowedBooks) &&
-  //       borrowedBooks.some(
-  //         (item: { bookId: string }) =>
-  //           String(item.bookId) === String(book._id),
-  //       );
-
-  //     setIsAlreadyBorrowed(alreadyBorrowed);
-  //   } catch (error) {
-  //     console.error("Borrow status error:", error);
-  //   }
-  // };
 
   // Handling button click
   const handleBorrowClick = async () => {
@@ -101,7 +63,7 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
       const token = await getTokenFromClient();
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`,{
+        `${process.env.NEXT_PUBLIC_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`,{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -136,7 +98,7 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
   };
 
   // Borrowing book
-  const handleBorrowBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
+const handleBorrowBook = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!userEmail) {
@@ -152,7 +114,7 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
 
       const res = await fetch(
 
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrow-books`,
+        `${process.env.NEXT_PUBLIC_API_URL}/borrow-books`,
         {
           method: "POST",
           headers: {
@@ -194,9 +156,11 @@ const BookBorrowModal = ({ book, setCurrentCopies }: Props) => {
 
       // Refreshing server data
       router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
+    } 
+    catch (error) {
+        toast.error("Something went wrong. Please try again.");
+    } 
+    finally {
       setIsBorrowing(false);
     }
   };

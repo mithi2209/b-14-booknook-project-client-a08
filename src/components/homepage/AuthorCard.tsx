@@ -19,7 +19,7 @@ type Props = {
 const AuthorCard = ({ author, index }: Props) => {
 
     return (
-         <motion.div
+     <motion.div
       initial={{ opacity: 0, y: 25 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -27,7 +27,7 @@ const AuthorCard = ({ author, index }: Props) => {
       className="group overflow-hidden rounded-2xl border border-[#DCCDBB]/70 bg-[#FFFCF7] shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-xl dark:border-[#53604F] dark:bg-[#303A30]"
     >
       {/* Author Image */}
-      <div className="relative aspect-[4/4.5] overflow-hidden">
+      <div className="relative aspect-4/4.5 overflow-hidden">
         <Image
           src={author.image}
           alt={author.name}
@@ -37,7 +37,7 @@ const AuthorCard = ({ author, index }: Props) => {
         />
 
         {/* Image overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-black/10" />
 
         {/* Author number */}
         <span className="absolute left-4 top-4 rounded-full border border-white/40 bg-black/20 px-3 py-1.5 font-serif text-xs text-white backdrop-blur-md">

@@ -6,14 +6,19 @@ import { ArrowRight, BookOpen } from "lucide-react";
 import BooksCard from "../shared/BooksCard";
 
 const NewArrivals = async () => {
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_API_URL}/new-arrivals`,
+    `${process.env.NEXT_PUBLIC_API_URL}/new-arrivals`,
+
     { cache: "no-store" },
   );
 
+
   const books: TBook[] = await res.json();
 
+
   return (
+    
     <section className=" py-16 bg-warm-ivory dark:bg-[#30392F] transition-colors duration-300 md:py-20">
       <div className="mx-auto container px-4 sm:px-6 lg:px-8">
         <div className="mb-10">

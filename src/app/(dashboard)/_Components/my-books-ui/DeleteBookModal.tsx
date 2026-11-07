@@ -37,7 +37,7 @@ const DeleteBookModal = ({
       const token = await getTokenFromClient();
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/delete-book/${book._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/delete-book/${book._id}`,
         {
           method: "DELETE",
           headers: {

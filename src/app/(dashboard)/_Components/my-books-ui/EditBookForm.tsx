@@ -85,7 +85,7 @@ const EditBookForm = ({
 
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/update-book/${book._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/update-book/${book._id}`,
         {
           method: "PATCH",
           headers: {

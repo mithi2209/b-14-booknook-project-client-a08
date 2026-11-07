@@ -34,7 +34,9 @@ const reviews = [
 ];
 
 const ReadersReviews = () => {
+  
   return (
+
     <section className="bg-warm-ivory py-8 transition-colors duration-300 dark:bg-[#30392F] sm:py-10 mt-8 lg:my-10">
       <div className="container mx-auto px-4">
         {/* Section Heading */}

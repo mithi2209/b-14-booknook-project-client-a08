@@ -19,7 +19,7 @@ const AllBooks = async ({searchParams,}: {searchParams:
   const { search = "" } = await searchParams;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_API_URL}/all-books`,
+    `${process.env.NEXT_PUBLIC_API_URL}/all-books`,
     { cache: "no-store" }
   );
 

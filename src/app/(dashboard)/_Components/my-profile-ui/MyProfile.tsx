@@ -44,6 +44,7 @@ const MyProfilePage = ({ user }: MyProfileProps) => {
         {/* MAIN PROFILE CARD */}
         <div className="rounded-2xl border border-[#E8BFA5] bg-[#FFF9F0] p-6 shadow-sm dark:border-[#69745D] dark:bg-[#3F4A3A] sm:p-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+            
             {/* SMALL AVATAR */}
             {user.image ? (
               <img
@@ -53,7 +54,9 @@ const MyProfilePage = ({ user }: MyProfileProps) => {
               />
             ) : (
               <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#E8BFA5] text-3xl font-semibold text-[#49372D] ring-4 ring-[#F0E2D4] dark:bg-[#69745D] dark:text-[#FAF0DF] dark:ring-[#85896B]">
-                {user.name?.charAt(0).toUpperCase() || "U"}
+
+                {user.name?.charAt(0).toUpperCase() || "BK"}
+
               </div>
             )}
 

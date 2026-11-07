@@ -19,6 +19,9 @@ import BookBorrowModal from "./BookBorrowModal";
 
 type BookDetailsProps = {
   book: TBook;
+
+
+
 };
 
 const BookDetails = ({ book }: BookDetailsProps) => {
@@ -160,7 +163,8 @@ const BookDetails = ({ book }: BookDetailsProps) => {
               {copiesLeft > 0 ? (
                 <BookBorrowModal
                     book={{ ...book, AvailableCopies: currentCopies }}
-                    setCurrentCopies={setCurrentCopies} />
+                    setCurrentCopies={setCurrentCopies} 
+                     />
                 ) : (
                 <button
                   disabled

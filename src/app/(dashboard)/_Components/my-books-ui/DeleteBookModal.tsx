@@ -5,6 +5,7 @@ import { useState } from "react";
 import { TBook } from "@/lib/dataType";
 import { authClient } from "@/lib/auth-client";
 import { AlertTriangle, Trash2, X } from "lucide-react";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 type DeleteBookModalProps = {
   book: TBook;
@@ -32,12 +33,16 @@ const DeleteBookModal = ({
     try {
       setIsDeleting(true);
 
+      // token from client
+      const token = await getTokenFromClient();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/delete-book/${book._id}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token}`,
           },
           body: JSON.stringify({ userEmail }),
         },

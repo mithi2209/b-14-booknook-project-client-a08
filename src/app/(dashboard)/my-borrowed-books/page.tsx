@@ -3,7 +3,10 @@
 
 
 import type { Metadata } from "next";
+
 import MyBorrowedBooks from "../_Components/my-borrowed-books-designs/MyBorrowedBooks";
+
+import { retrieveTokenFromServer } from "@/lib/retrieveTokenFromServer";
 
 
 export const metadata: Metadata = {
@@ -13,14 +16,14 @@ export const metadata: Metadata = {
 
 
 
-const MyBorrowedBooksPage = () => {
+const MyBorrowedBooksPage = async() => {
      
-
-
+    // token from server
+      const token = await retrieveTokenFromServer() ;
 
     return (
         <div>
-            <MyBorrowedBooks/>
+            <MyBorrowedBooks token={token} />
         </div>
     );
 };

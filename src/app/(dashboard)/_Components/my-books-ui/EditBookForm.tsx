@@ -7,6 +7,7 @@ import { TBook } from "@/lib/dataType";
 import { authClient } from "@/lib/auth-client";
 import { type FormEvent, useState } from "react";
 import { BookOpen, ImagePlus, Save, X } from "lucide-react";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 type EditBookFormProps = {
   book: TBook;
@@ -33,6 +34,8 @@ const EditBookForm = ({
     const formData = new FormData();
 
     formData.append("image", file);
+
+
 
     const res = await fetch("/api/upload-image", {
       method: "POST",
@@ -77,12 +80,17 @@ const EditBookForm = ({
         userEmail,
       };
 
+      // get token from client 
+      const token = await getTokenFromClient();
+
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/update-book/${book._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token}` ,
           },
           body: JSON.stringify(updatedData),
         },

@@ -10,39 +10,40 @@ type Props = {
   initialSearch: string;
 };
 
-const SearchAllBooks = ({ books, initialSearch }: Props ) => {
+const SearchAllBooks = ({ books, initialSearch }: Props) => {
 
-      const [searchBook, setSearchBook] = useState(initialSearch);
-        const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchBook, setSearchBook] = useState(initialSearch);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [availability, setAvailability] = useState("all");
-
+ 
   const categories = [
     ...new Set(books.map((book) => book.Category).filter(Boolean)),
   ];
 
-  const filteredBooks = books.filter((book) => {
+//   filter books 
+  const filteredBooks = books.filter((book) => {    
+
     const search = searchBook.toLowerCase();
 
     const matchesSearch =
       (book.Title ?? "").toLowerCase().includes(search) ||
       (book.Author ?? "").toLowerCase().includes(search);
 
-       const matchesCategory =
+    const matchesCategory =
       selectedCategory === "all" || book.Category === selectedCategory;
 
-        const matchesAvailability =
-        availability === "all" ||
-        (availability === "available" && Number(book.AvailableCopies) > 0) ||
-        (availability === "unavailable" && Number(book.AvailableCopies) <= 0);
+    const matchesAvailability =
+      availability === "all" ||
+      (availability === "available" && Number(book.AvailableCopies) > 0) ||
+      (availability === "unavailable" && Number(book.AvailableCopies) <= 0);
 
     return matchesSearch && matchesCategory && matchesAvailability;
   });
 
-    return (
-        <>
+  return (
+    <>
       {/* Search and Filters */}
       <div className="mb-8 rounded-2xl border border-[#E2D4BE] bg-[#FFF9EF] p-4 shadow-sm dark:border-[#46513F] dark:bg-[#293329] sm:p-6">
-
         <div className="mb-5 flex items-center gap-2">
           <SlidersHorizontal
             size={18}
@@ -52,7 +53,6 @@ const SearchAllBooks = ({ books, initialSearch }: Props ) => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-
           {/* Search */}
           <div className="relative">
             <Search
@@ -96,7 +96,9 @@ const SearchAllBooks = ({ books, initialSearch }: Props ) => {
         </div>
 
         {/* Clear Filters */}
-        {(searchBook || selectedCategory !== "all" || availability !== "all") && (
+        {(searchBook ||
+          selectedCategory !== "all" ||
+          availability !== "all") && (
           <button
             type="button"
             onClick={() => {
@@ -125,9 +127,7 @@ const SearchAllBooks = ({ books, initialSearch }: Props ) => {
         <div className="py-20 text-center">
           <BookOpen className="mx-auto mb-4 h-12 w-12 text-[#85896B]" />
 
-          <h3 className="text-xl font-semibold">
-            No Matching Books Found
-          </h3>
+          <h3 className="text-xl font-semibold">No Matching Books Found</h3>
 
           <p className="mt-2 text-sm text-[#85896B]">
             Try changing your search or filters.
@@ -141,8 +141,7 @@ const SearchAllBooks = ({ books, initialSearch }: Props ) => {
         </div>
       )}
     </>
-
-    );
+  );
 };
 
 export default SearchAllBooks;

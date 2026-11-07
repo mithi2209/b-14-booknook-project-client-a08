@@ -13,7 +13,11 @@ import { authClient } from "@/lib/auth-client";
 import MyBookCardHeading from "./MyBookCardHeading";
 
 
-const MyBooksSection = () => {
+type Props = {
+   token: string | null;
+};
+
+const MyBooksSection = ({ token }: Props) => {
 
   const { data: session, isPending } = authClient.useSession();
 
@@ -22,6 +26,8 @@ const MyBooksSection = () => {
   const [myBooks, setMyBooks] = useState<TBook[]>([]);
   const [loading, setLoading] = useState(true);
 
+
+  // user check
   useEffect(() => {
     if (isPending) return;
 
@@ -32,11 +38,27 @@ const MyBooksSection = () => {
     }
 
     const getMyBooks = async () => {
+
       try {
+
         setLoading(true);
 
+
+        // token-->checking better auth jwt 
+        if (!token) {
+          toast.error("Authentication failed");
+          return;
+        }
+
+        // user books fetching
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API_URL}/my-books/${encodeURIComponent(userEmail)}`,
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/my-books/${encodeURIComponent(userEmail)}` ,{
+
+            headers:{
+              Authorization: `Bearer ${token}`,
+            }
+          }
+
         );
 
         const data = await res.json();
@@ -47,16 +69,18 @@ const MyBooksSection = () => {
         }
 
         setMyBooks(data);
-      } catch (error) {
+      } 
+      catch (error) {
         console.log(error);
         toast.error("Something went wrong!");
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
 
     getMyBooks();
-  }, [userEmail, isPending]);
+  }, [userEmail, isPending , token]);
 
 
     // update a book
@@ -76,8 +100,10 @@ const MyBooksSection = () => {
     };
 
     if (isPending || loading) return <Loading />;
-
+   
+    
   return (
+    
    <section className="min-h-screen bg-background text-foreground">
     <div className="mx-auto container space-y-6 p-4 sm:p-6 lg:p-8">
 

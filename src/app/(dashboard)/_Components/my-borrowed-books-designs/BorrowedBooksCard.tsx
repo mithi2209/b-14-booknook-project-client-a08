@@ -17,6 +17,7 @@ import {
 
 import formatDate from "@/lib/formateDate";
 import type { TBorrowedBook } from "@/lib/dataType";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 type BorrowedBooksProps = {
   books: TBorrowedBook[];
@@ -43,7 +44,11 @@ const BorrowedBooksCard = ({ books }: BorrowedBooksProps) => {
       }
 
     try {
+
       setIsReturning(id);
+      
+      // get token from client
+      const token = await getTokenFromClient();
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/return-book/${id}`,
@@ -51,6 +56,7 @@ const BorrowedBooksCard = ({ books }: BorrowedBooksProps) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token}`,
           },
           body: JSON.stringify({
             userEmail: userEmail,

@@ -1,6 +1,7 @@
 
 "use client";
 
+import { toast } from "sonner";
 import Loading from "@/app/loading";
 
 import { useEffect, useState } from "react";
@@ -9,9 +10,12 @@ import type { TBorrowedBook } from "@/lib/dataType";
 import BorrowedBooksCard from "./BorrowedBooksCard";
 import EmptyBorrowedBooks from "./EmptyBorrowedBooks";
 import BorrowedBooksHeader from "./BorrowedBooksHeader";
-import { toast } from "sonner";
 
-const MyBorrowedBooks = () => {
+type Props = {
+   token: string | null;
+}; 
+const MyBorrowedBooks = ({ token }:Props) => {
+
   const { data: session, isPending } = authClient.useSession();
 
   const userEmail = session?.user?.email;
@@ -31,10 +35,21 @@ const MyBorrowedBooks = () => {
 
   const getBorrowedBooks = async () => {
     try {
+      
       setLoading(true);
 
+      // token error
+        if(!token){
+          toast.error("Token Authentication failed. Please login again.");
+          return;
+        }
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}`
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/borrowed-books/${encodeURIComponent(userEmail)}` , {
+          headers:{
+            authorization : `Bearer ${token}`,
+          }
+        }
       );
 
       const data = await res.json();
@@ -52,16 +67,18 @@ const MyBorrowedBooks = () => {
       );
 
       setBorrowedBooks(activeBooks);
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error);
       toast.error("Something went wrong!");
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
 
   getBorrowedBooks();
-  }, [userEmail, isPending]);
+  }, [userEmail, isPending , token]);
   
 
   if (isPending || loading) {

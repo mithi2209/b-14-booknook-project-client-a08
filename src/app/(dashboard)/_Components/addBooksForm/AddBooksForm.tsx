@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 const AddBooksForm = () => {
 
@@ -85,7 +86,16 @@ const AddBooksForm = () => {
         userEmail: formData.get("userEmail"),
       };
 
-        
+       
+      // token from client 
+      const token = await getTokenFromClient() ;
+          
+        // token error
+        if(!token){
+          toast.error("Token Authentication failed. Please login again.");
+          return;
+        }
+
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_API_URL}/add-books`,
@@ -93,16 +103,17 @@ const AddBooksForm = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(bookData),
           }
         );
 
-        const data = await res.json();
-
+        const result = await res.json();
+        console.log(result);
         
         if (!res.ok) {
-          throw new Error(data.message || "Failed to add book");
+          throw new Error(result.message || "Failed to add book");
         }
 
         

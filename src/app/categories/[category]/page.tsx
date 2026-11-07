@@ -25,23 +25,33 @@ const CategoryPage = async ({ params }:
     
    const { category } = await params;
 
+
+console.log("Category from URL:", category);
+console.log("Category names:", categoryNames);
+
     const categoryName = categoryNames[category.toLowerCase()];
+
+    console.log("Matched category:", categoryName);
 
     if (!categoryName) {
         return <div className="py-20 text-center">Category not found.</div>;
     }
 
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/books/category/${category}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/books/category/${category}`,
         {
         cache: "no-store",
         }
     );
+    
+    console.log("API Status:", res.status); 
 
     const BooksData: TBook[] = await res.json();
+    console.log("Books Data:", BooksData);
 
   return (
-           <section className="min-h-screen bg-[#FAF0DF] px-4 py-12 text-[#49372D] dark:bg-[#202820] dark:text-[#FAF0DF]">
+
+    <section className="min-h-screen bg-[#FAF0DF] px-4 py-12 text-[#49372D] dark:bg-[#202820] dark:text-[#FAF0DF]">
       <div className="container mx-auto">
 
         {/* Page Heading */}

@@ -110,8 +110,9 @@ const TopCategories = () => {
           {categories.map((category, index) => (
 
             <motion.div key={category.slug} variants={itemVariants}>
-              <Link
-                href={`/categories/${category.slug}`}
+              
+                <Link
+                 href={`/categories/${category.slug}`}
                 className="group flex items-center gap-3 border-b border-warm-ivory/30 py-3 transition-all duration-300 hover:pl-2 dark:border-warm-ivory/20"
               >
                 <span className="text-[11px] text-sunny-yellow dark:text-warm-ivory/80">
